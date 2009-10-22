@@ -58,8 +58,9 @@ def newMovie
 	end
 	
 	movie.save
-		
-	Director.get(params[:director_name]) << movie
+	director = Director.get(params[:director_name])
+	if !director.nil?
+		director << movie
 end
 
 post '/addMovie' do
