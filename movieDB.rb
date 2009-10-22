@@ -39,7 +39,7 @@ end
 
 
 #Create/Upgrade All Tables!
-DataMapper.auto_upgrade!
+#DataMapper.auto_upgrade!
 
 
 #Use utf-8 for outgoing
