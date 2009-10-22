@@ -38,6 +38,7 @@ before do
 	headers "Content-Type" => "text/html; charset=utf-8"
 end
 
+
 get '/' do haml :index end
 
 post '/search' do haml :search end
@@ -179,12 +180,12 @@ __END__
 			%form{:method => "POST", :action => "/search", :style => "font:14px/16px helvetica;"}
 				Search
 				%input{:type => "text", :size => "20", :name => "searchTerm"}
-		.content
-
+		%table
 			= yield
 
 			
 @@index
+= params[:agent][0]
 %h3 
 	Random Movie
 	-if Movie.all.length != 0
