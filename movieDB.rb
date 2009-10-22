@@ -60,10 +60,10 @@ def newMovie
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
 	
 	
-	#params[:cast].split(/[ ]?,[ ]?/).each do |name|
-	#	actor = Actor.get(name)
-	#	movie.actors << actor
-	#end
+	params[:cast].split(/[ ]?,[ ]?/).each do |name|
+		actor = Actor.get(name)
+		#movie.actors << actor
+	end
 	
 	movie.save
 	director = Director.get(params[:director_name])
