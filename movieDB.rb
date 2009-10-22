@@ -4,7 +4,7 @@ require 'dm-core'
 require 'dm-aggregates'
 require 'haml'
 
-DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/movieDB.db")
 
 class Actor
 	include DataMapper::Resource
