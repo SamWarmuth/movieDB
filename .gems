@@ -1,2 +1,1 @@
-datamapper --version '=0.10.1'
-do_postgres --version '=0.10.0'
+flix4r --source 'gemcutter.org'
