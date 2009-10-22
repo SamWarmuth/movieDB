@@ -60,6 +60,7 @@ def newMovie
 	movie.save
 	director = Director.get(params[:director_name])
 	director.movies << movie if !director.nil?
+	director.save
 end
 
 post '/addMovie' do
@@ -86,7 +87,10 @@ end
 
 get '/actors' do haml :listActors end
 
-get '/actor/:name' do haml :actorInfo end
+get '/actor/:name' do
+	@name = params[:name]
+	haml :actorInfo 
+end
 
 get '/addActor' do haml :addActor end
 
@@ -331,7 +335,7 @@ __END__
 	%a{:href => "/addActor"} Add Actor
 	
 @@actorInfo
-- actor = Actor.get(params[:name])
+- actor = Actor.get(@name)
 %h1 
 	= actor.name
 %h2
