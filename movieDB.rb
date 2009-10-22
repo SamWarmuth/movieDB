@@ -3,7 +3,6 @@ require 'sinatra'
 require 'datamapper'
 require 'do_postgres'
 require 'haml'
-
 	
 class Actor
 	include DataMapper::Resource
