@@ -1,1 +1,2 @@
+datamapper --version '=0.10.1'
 dm-core --version '=0.10.1'
