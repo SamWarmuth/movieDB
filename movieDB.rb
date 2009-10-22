@@ -1,7 +1,7 @@
 require 'rubygems'
-gem 'sinatra', '=0.9.4'
-gem 'datamapper', '=0.10.1'
-gem 'do_postgres', '=0.10.0'
+require 'sinatra'
+require 'datamapper'
+require 'do_postgres'
 require 'haml'
 
 
