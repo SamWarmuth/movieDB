@@ -1,6 +1,8 @@
 require 'rubygems'
 require 'sinatra'
 require 'dm-core'
+require 'do-postgres'
+require 'data-objects'
 require 'haml'
 
 
