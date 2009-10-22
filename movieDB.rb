@@ -410,6 +410,6 @@ __END__
 %form{:method => "POST", :action => "/editDirector/#{params[:name]}"}
 	%table{:align => "center"}
 		= text_input("Name", "name", director.name)
-		= text_input("Age", "age", director.name)
+		= text_input("Age", "age", director.age)
 	%p	
 		%input{:type => "submit", :value => "Edit Director"}
