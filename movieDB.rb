@@ -8,7 +8,8 @@ class Actor
 	include DataMapper::Resource
 	property :name,	String, :key => true
 	property :age,	Integer
-	has n, :movies, :through => Resource
+	has n, :casts
+	has n, :movies, :through => :casts
 end
 
 class Movie
@@ -19,7 +20,8 @@ class Movie
 	property :plot,			Text
 	property :mpaa_rating,	String
 	belongs_to :director
-	has n, :actors, :through => Resource
+	has n, :casts
+	has n, :actors, :through => :casts
 end
 
 class Director
@@ -29,9 +31,17 @@ class Director
 	has n, :movies
 end
 
+class Cast
+	include DataMapper::Resource
+	
+	property :id, Serial
+	belongs_to :movie
+	belongs_to :actor
+end
+
 DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
 #Create/Upgrade All Tables!
-#DataMapper.auto_upgrade!
+DataMapper.auto_upgrade!
 
 #Use utf-8 for outgoing
 before do
@@ -43,9 +53,7 @@ get '/' do haml :index end
 post '/search' do haml :search end
 
 get '/movies' do haml :listMovies end
-
 get '/movie/:title' do haml :movieInfo end
-
 get '/addMovie' do haml :addMovie end
 
 def newMovie 
@@ -86,9 +94,7 @@ get '/deleteMovie/:title' do
 end
 
 get '/actors' do haml :listActors end
-
 get '/actor/:name' do haml :actorInfo end
-
 get '/addActor' do haml :addActor end
 
 post '/addActor' do
@@ -115,9 +121,7 @@ get '/deleteActor/:name' do
 end
 
 get '/directors' do haml :listDirectors end
-
 get '/director/:name' do haml :directorInfo end
-
 get '/addDirector' do haml :addDirector end
 
 post '/addDirector' do
@@ -182,7 +186,6 @@ __END__
 		.content
 			= yield
 
-			
 @@index
 %h3 
 	Random Movie
@@ -211,13 +214,10 @@ __END__
 					%a{:href => "/actor/#{actor.name}"} #{actor.name}
 					%br/
 
-
-	
 @@search
 -movies = Movie.all(:title.like => "%#{params[:searchTerm]}%")
 -actors = Actor.all(:name.like => "%#{params[:searchTerm]}%")
 -directors = Director.all(:name.like => "%#{params[:searchTerm]}%")
-
 %h1 
 	Searching for '#{params[:searchTerm]}'
 %h2
@@ -226,19 +226,16 @@ __END__
 		-movies.each do |movie|
 			%p
 				%a{:href => "/movie/#{movie.title}"} #{movie.title}
-
 	-if !(actors[0].nil?)	
 		%p Actors
 		-actors.each do |actor|
 			%p
 				%a{:href => "/actor/#{actor.name}"} #{actor.name}
-
 	-if !(directors[0].nil?)	
 		%p Directors
 		-directors.each do |director|
 			%p
 				%a{:href => "/director/#{director.name}"} #{director.name}
-
 
 @@listMovies
 %h1 Movies
@@ -268,7 +265,6 @@ __END__
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
-
 %p
 	= movie.plot
 -actors = movie.actors
@@ -337,12 +333,10 @@ __END__
 %h2
 	= actor.age
 	years old
-
 %h3
 	- actor.movies.each do |movie|
 		%p
 			%a{:href => "/movie/#{movie.title}"} #{movie.title}
-	
 %p
 	%a{:href => "/editActor/#{actor.name}"} Edit Actor
 	|
