@@ -1,8 +1,8 @@
 require 'rubygems'
-require 'sinatra'
-require 'dm-core'
+gem 'sinatra', '=0.9.4'
+gem 'dm-core', '=0.10.1'
 require 'do_postgres'
-require 'data_objects'
+gem 'data_objects', '=0.10.0'
 require 'haml'
 
 
