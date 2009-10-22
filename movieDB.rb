@@ -3,7 +3,6 @@ require 'sinatra'
 require 'dm-core'
 require 'dm-aggregates'
 require 'haml'
-require 'flix4r'
 
 DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
 
@@ -53,10 +52,6 @@ end
 
 post '/search' do
 	haml :search
-end
-
-post '/autofill' do
-	haml :autofill
 end
 
 get '/movies' do
@@ -170,28 +165,30 @@ __END__
 @@index
 %h3 
 	Random Movie
-	-movie = Movie.all[rand(Movie.all.length)]
-%h1
-	%a{:href => "/movie/#{movie.title}"} #{movie.title}
-	(#{movie.mpaa_rating})
-%h2	
-	= movie.release_year
-	\-
-	%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
-	= movie.length
-	minutes
+	-if Movie.all.length != 0
+		-movie = Movie.all[rand(Movie.all.length)]
+		%h1
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
+			(#{movie.mpaa_rating})
+		%h2	
+			= movie.release_year
+			\-
+			-if !movie.director.nil?
+				%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
+			= movie.length
+			minutes
 
-%p
-	= movie.plot
--actors = movie.actors
--if (!actors[0].nil?)
-	%h2
-		Actors
-		%br/
-	%h3
-		-actors.each do |actor|
-			%a{:href => "/actor/#{actor.name}"} #{actor.name}
-			%br/
+		%p
+			= movie.plot
+		-actors = movie.actors
+		-if (!actors[0].nil?)
+			%h2
+				Actors
+				%br/
+			%h3
+				-actors.each do |actor|
+					%a{:href => "/actor/#{actor.name}"} #{actor.name}
+					%br/
 
 
 	
@@ -221,21 +218,6 @@ __END__
 			%p
 				%a{:href => "/director/#{director.name}"} #{director.name}
 
-@@autofill
-- movie = NetFlix::Title.search(:term => params[:title], :max_results => 1).first
-%h1
-	= movie.title
-	(#{movie.rating})
-%h2
-	= movie.release_year
-= movie.synopsis
-%h3
-	Actors
-	%br/
-	= movie.actors.join(", ")
-	
-%form{:method => "POST", :action => "/addMovie"}
-	%input{:type => "submit", :value => "Add This Movie"}
 
 @@listMovies
 %h1 Movies
@@ -261,7 +243,8 @@ __END__
 %h2	
 	= movie.release_year
 	\-
-	%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
+	-if !movie.director.nil?
+		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
 
@@ -285,13 +268,6 @@ __END__
 @@addMovie
 %h1 Add Movie
 %br/
-
-%form{:method => "POST", :action => "/autofill"}
-	(Auto-Fill) Title
-	%input{:type => "text", :size => "25", :name => "title"}
-	%input{:type => "submit", :value => "Autofill"}
-
-%p ___________
 
 %form{:method => "POST", :action => "/addMovie"}
 	%table{:align => "center"}
