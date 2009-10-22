@@ -1,39 +1,34 @@
 require 'rubygems'
 require 'sinatra'
 require 'datamapper'
-require 'do_postgres'
+#require 'do_postgres'
 require 'haml'
+require 'flix4r'
 
 
 	
 class Actor
 	include DataMapper::Resource
-	
 	property :name,	String, :key => true
 	property :age,	Integer
-	
 	has n, :movies, :through => Resource
 end
 
 class Movie
 	include DataMapper::Resource
-	
 	property :title, 		String, :key => true
 	property :release_year,	Integer
 	property :length,		Integer
 	property :plot,			Text
 	property :mpaa_rating,	String
-	
 	belongs_to :director
 	has n, :actors, :through => Resource
 end
 
 class Director
 	include DataMapper::Resource
-	
 	property :name,	String, :key => true
 	property :age,	Integer
-	
 	has n, :movies
 end
 
@@ -41,35 +36,22 @@ DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB
 #Create/Upgrade All Tables!
 #DataMapper.auto_upgrade!
 
-
 #Use utf-8 for outgoing
 before do
 	headers "Content-Type" => "text/html; charset=utf-8"
 end
 
-get '/' do
-	haml :index
-end
+get '/' do haml :index end
 
+post '/search' do haml :search end
 
-post '/search' do
-	haml :search
-end
+get '/movies' do haml :listMovies end
 
-get '/movies' do
-	haml :listMovies
-end
+get '/movie/:title' do haml :movieInfo end
 
-get '/movie/:title' do
-	haml :movieInfo
-end
+get '/addMovie' do haml :addMovie end
 
-get '/addMovie' do
-	haml :addMovie
-end
-
-post '/addMovie' do
-	halt(400, "Invalid Movie Title") if (params[:title]=="")
+def newMovie 
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :director_name => params[:director_name], :plot => params[:plot])
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
@@ -77,7 +59,22 @@ post '/addMovie' do
 		movie.actors << actor
 	end
 	movie.save
+end
+
+post '/addMovie' do
+	halt(400, "Invalid Movie Title") if (params[:title]=="")
+	newMovie
 	redirect '/movies'
+end
+
+get '/editMovie/:title' do haml :editMovie end
+
+post '/editMovie/:oldTitle' do
+	halt(400, "Invalid Movie Title") if (params[:title]=="")
+	movie = Movie.get(params[:oldTitle])
+	movie.destroy!
+	newMovie
+	redirect "/movie/#{ params[:title] }"
 end
 
 get '/deleteMovie/:title' do
@@ -86,20 +83,24 @@ get '/deleteMovie/:title' do
 	redirect '/movies'
 end
 
-get '/actors' do
-	haml :listActors
-end
+get '/actors' do haml :listActors end
 
-get '/actor/:name' do
-	haml :actorInfo
-end
+get '/actor/:name' do haml :actorInfo end
 
-
-get '/addActor' do
-	haml :addActor
-end
+get '/addActor' do haml :addActor end
 
 post '/addActor' do
+	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
+	actor.save
+	redirect '/actors'
+end
+
+get '/editActor/:name' do haml :editActor end
+
+post '/editActor/:oldName' do
+	halt(400, "Invalid Actor Name") if (params[:name]=="")
+	actor = Actor.get(params[:oldName])
+	actor.destroy!
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
 	actor.save
 	redirect '/actors'
@@ -111,17 +112,11 @@ get '/deleteActor/:name' do
 	redirect '/actors'
 end
 
-get '/directors' do
-	haml :listDirectors
-end
+get '/directors' do haml :listDirectors end
 
-get '/director/:name' do
-	haml :directorInfo
-end
+get '/director/:name' do haml :directorInfo end
 
-get '/addDirector' do
-	haml :addDirector
-end
+get '/addDirector' do haml :addDirector end
 
 post '/addDirector' do
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
@@ -129,7 +124,30 @@ post '/addDirector' do
 	redirect '/directors'
 end
 
+get '/editDirector/:name' do haml :editDirector end
+
+post '/editDirector/:oldName' do
+	halt(400, "Invalid Actor Name") if (params[:name]=="")
+	director = Director.get(params[:oldName])
+	director.destroy!
+	director = Director.new(:name => params[:name], :age => params[:age].to_i)
+	director.save
+	redirect '/directors'
+end
+
 get '/deleteDirector/:name' do
+	director = Director.get(params[:name])
+	director.destroy!
+	redirect '/directors'
+end
+
+helpers do
+	def text_input(lable, name, text="")
+		%{<tr><td> #{lable}</td><td><input type="text" size="25" name="#{name}" value="#{text}">}
+	end
+	def textarea_input(lable, name, text="")
+		%{<tr><td> #{lable}</td><td><textarea rows="5" cols="23" name=#{name}>#{text}</textarea>}
+	end
 end
 
 __END__
@@ -229,13 +247,13 @@ __END__
 	(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
-	#{movie.director_name},
+	-if !movie.director.nil?
+		#{movie.director.name},
 	= movie.length
 	minutes
 	%br/
-%br/
-%a{:href => "/addMovie"} Add Movie
-%br/
+%p
+	%a{:href => "/addMovie"} Add Movie
 	
 @@movieInfo
 - movie = Movie.get(params[:title])
@@ -261,48 +279,44 @@ __END__
 		-actors.each do |actor|
 			%a{:href => "/actor/#{actor.name}"} #{actor.name}
 			%br/
-%br/
-%h4
-	%a{:href => "/deleteMovie/#{movie.title}"} Delete Movie
-		
-		
+%p
+	%a{:href => "/editMovie/#{movie.title}"} Edit Movie		
+	|
+	%a{:href => "/deleteMovie/#{movie.title}"} Delete Movie	
 	
 @@addMovie
 %h1 Add Movie
-%br/
-
 %form{:method => "POST", :action => "/addMovie"}
 	%table{:align => "center"}
-		%tr 
-			%td Title
-			%td 
-				%input{:type => "text", :size => "25", :name => "title"}
-		%tr
-			%td Release Year
-			%td
-				%input{:type => "text", :size => "25", :name => "release_year"}
-		%tr
-			%td Length (Minutes)
-			%td
-				%input{:type => "text", :size => "25", :name => "length"}
-		%tr
-			%td Director Name
-			%td
-				%input{:type => "text", :size => "25", :name => "director_name"}
-		%tr
-			%td MPAA Rating
-			%td
-				%input{:type => "text", :size => "25", :name => "mpaa_rating"}
-		%tr
-			%td Plot Summary
-			%td
-				%textarea{:rows => "5", :cols => "23", :name => "plot"}
-		%tr
-			%td Cast (comma separated)
-			%td
-				%textarea{:rows => "5", :cols => "23", :name => "cast"}
-	%br/	
-	%input{:type => "submit", :value => "Add Movie"}
+		= text_input("Title","title")
+		= text_input("Release Year","release_year")		
+		= text_input("Length (minutes)","length")
+		= text_input("Director Name","director_name")
+		= text_input("MPAA Rating","mpaa_rating")
+		= textarea_input("Plot Summary", "plot")
+		= textarea_input("Cast (comma separated)", "cast")
+	%p	
+		%input{:type => "submit", :value => "Add Movie"}
+
+@@editMovie
+%h1 Edit Movie
+- movie = Movie.get(params[:title])
+%p
+	= movie.title
+%form{:method => "POST", :action => "/editMovie/#{movie.title}"}
+	%table{:align => "center"}
+		= text_input("Title","title", movie.title)
+		= text_input("Release Year","release_year", movie.release_year)		
+		= text_input("Length (minutes)","length", movie.length.to_s)
+		= text_input("Director Name","director_name", movie.director.name.to_s)
+		= text_input("MPAA Rating","mpaa_rating", movie.mpaa_rating)
+		= textarea_input("Plot Summary", "plot", movie.plot)
+		- cast = ""
+		- movie.actors.each do |actor|
+			- cast << "#{actor.name}, "
+		= textarea_input("Cast (comma separated)", "cast", cast)
+	%p	
+		%input{:type => "submit", :value => "Edit Movie"}
 	
 @@listActors
 %h1 Actors
@@ -312,46 +326,45 @@ __END__
 	= actor.age
 	years old
 	%br/
-%br/
-%a{:href => "/addActor"} Add Actor
-%br/
+%p
+	%a{:href => "/addActor"} Add Actor
 	
 @@actorInfo
 - actor = Actor.get(params[:name])
-%h1
+%h1 
 	= actor.name
-	
 %h2
 	= actor.age
 	years old
-	%p
-		%strong Movies
-	
+
 %h3
 	- actor.movies.each do |movie|
-		%a{:href => "/movie/#{movie.title}"} #{movie.title}
-		%br/
+		%p
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
 	
-%br/
-%h4
+%p
+	%a{:href => "/editActor/#{actor.name}"} Edit Actor
+	|
 	%a{:href => "/deleteActor/#{actor.name}"} Delete Actor
 	
 @@addActor
 %h1 Add Actor
-%br/
 %form{:method => "POST", :action => "/addActor"}
 	%table{:align => "center"}
-		%tr 
-			%td Name
-			%td 
-				%input{:type => "text", :size => "25", :name => "name"}
-		%tr
-			%td Age
-			%td
-				%input{:type => "text", :size => "25", :name => "age"}
-	%br/	
-	%input{:type => "submit", :value => "Add Actor"}
+		= text_input("Name", "name")
+		= text_input("Age", "age")
+	%p	
+		%input{:type => "submit", :value => "Add Actor"}
 	
+@@editActor
+%h1 Edit Actor
+- actor = Actor.get(params[:name])
+%form{:method => "POST", :action => "/editActor/#{params[:name]}"}
+	%table{:align => "center"}
+		= text_input("Name", "name", actor.name)
+		= text_input("Age", "age", actor.age)
+	%p	
+		%input{:type => "submit", :value => "Edit Actor"}
 	
 @@listDirectors
 %h1 Directors
@@ -361,9 +374,8 @@ __END__
 	= director.age
 	years old
 	%br/
-%br/
-%a{:href => "/addDirector"} Add Director
-%br/
+%p
+	%a{:href => "/addDirector"} Add Director
 
 @@directorInfo
 - director = Director.get(params[:name])
@@ -372,27 +384,31 @@ __END__
 %h2
 	= director.age
 	years old
-	%br/
-	%br/
-	%br/
-	%strong Movies
 %h3
 	- director.movies.each do |movie|
-		%a{:href => "/movie/#{movie.title}"} #{movie.title}
-		%br
+		%p
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
+%p
+	%a{:href => "/editDirector/#{director.name}"} Edit Director
+	|
+	%a{:href => "/deleteDirector/#{director.name}"} Delete Director
+		
 
 @@addDirector
 %h1 Add Director
-%br/
 %form{:method => "POST", :action => "/addDirector"}
 	%table{:align => "center"}
-		%tr 
-			%td Name
-			%td 
-				%input{:type => "text", :size => "25", :name => "name"}
-		%tr
-			%td Age
-			%td
-				%input{:type => "text", :size => "25", :name => "age"}
-	%br/	
-	%input{:type => "submit", :value => "Add Director"}
+		= text_input("Name", "name")
+		= text_input("Age", "age")
+	%p	
+		%input{:type => "submit", :value => "Add Director"}
+	
+@@editDirector
+%h1 Edit Director
+- director = Director.get(params[:name])
+%form{:method => "POST", :action => "/editDirector/#{params[:name]}"}
+	%table{:align => "center"}
+		= text_input("Name", "name", director.name)
+		= text_input("Age", "age", director.name)
+	%p	
+		%input{:type => "submit", :value => "Edit Director"}
