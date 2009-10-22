@@ -1,6 +1,6 @@
 require 'rubygems'
 gem 'sinatra', '=0.9.4'
-gem 'dm-core', '=0.10.1'
+gem 'datamapper', '=0.10.1'
 gem 'do_postgres', '=0.10.0'
 require 'haml'
 
