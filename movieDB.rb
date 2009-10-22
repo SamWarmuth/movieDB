@@ -181,6 +181,7 @@ __END__
 				Search
 				%input{:type => "text", :size => "20", :name => "searchTerm"}
 		.content
+
 			= yield
 
 			
