@@ -2,7 +2,7 @@ require 'rubygems'
 gem 'sinatra', '=0.9.4'
 gem 'dm-core', '=0.10.1'
 gem 'data_objects', '=0.10.0'
-require 'do_postgres', '=0.10.0'
+gem 'do_postgres', '=0.10.0'
 require 'haml'
 
 
