@@ -57,6 +57,11 @@ get '/movie/:title' do haml :movieInfo end
 get '/addMovie' do haml :addMovie end
 
 def newMovie 
+
+end
+
+post '/addMovie' do
+	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
 	
 	
@@ -69,11 +74,6 @@ def newMovie
 	director = Director.get(params[:director_name])
 	director.movies << movie if !director.nil?
 	director.save
-end
-
-post '/addMovie' do
-	halt(400, "Invalid Movie Title") if (params[:title]=="")
-	newMovie
 	redirect '/movies'
 end
 
@@ -82,8 +82,7 @@ get '/editMovie/:title' do haml :editMovie end
 post '/editMovie/:oldTitle' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	movie = Movie.get(params[:oldTitle])
-	movie.destroy!
-	newMovie
+	movie.attributes(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
 	redirect "/movie/#{ params[:title] }"
 end
 
