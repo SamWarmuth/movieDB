@@ -1,11 +1,11 @@
 require 'rubygems'
 gem 'sinatra', '=0.9.4'
 gem 'dm-core', '=0.10.1'
-gem 'data_objects', '=0.10.0'
 gem 'do_postgres', '=0.10.0'
 require 'haml'
 
-
+	DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+	
 class Actor
 	include DataMapper::Resource
 	
@@ -38,12 +38,9 @@ class Director
 end
 
 
-configure do
-	DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+#Create/Upgrade All Tables!
+DataMapper.auto_upgrade!
 
-	#Create/Upgrade All Tables!
-	DataMapper.auto_upgrade!
-end
 
 #Use utf-8 for outgoing
 before do
