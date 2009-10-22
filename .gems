@@ -1,3 +1,2 @@
 dm-core --version '>=0.10.1'
 dm-aggregates --version '>=0.10.1'
-haml --version '>=2.2.9'

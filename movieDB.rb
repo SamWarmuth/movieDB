@@ -4,7 +4,6 @@ require 'dm-core'
 require 'dm-aggregates'
 require 'haml'
 
-DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://movieDB.db")
 
 class Actor
 	include DataMapper::Resource
@@ -37,8 +36,13 @@ class Director
 	has n, :movies
 end
 
-#Create/Upgrade All Tables!
-DataMapper.auto_upgrade!
+
+configure do
+	DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+
+	#Create/Upgrade All Tables!
+	DataMapper.auto_upgrade!
+end
 
 #Use utf-8 for outgoing
 before do
