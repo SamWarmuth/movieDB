@@ -4,7 +4,7 @@ gem 'datamapper', '=0.10.1'
 gem 'do_postgres', '=0.10.0'
 require 'haml'
 
-	DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+
 	
 class Actor
 	include DataMapper::Resource
@@ -37,7 +37,7 @@ class Director
 	has n, :movies
 end
 
-
+DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
 #Create/Upgrade All Tables!
 #DataMapper.auto_upgrade!
 
