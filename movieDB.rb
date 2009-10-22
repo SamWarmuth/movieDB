@@ -37,7 +37,7 @@ end
 
 
 configure do
-	DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+	DataMapper::setup(:default, "sqlite3://#{Dir.pwd}/movieDB.db")
 
 	#Create/Upgrade All Tables!
 	DataMapper.auto_upgrade!
