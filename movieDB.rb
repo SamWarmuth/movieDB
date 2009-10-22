@@ -49,13 +49,17 @@ get '/movie/:title' do haml :movieInfo end
 get '/addMovie' do haml :addMovie end
 
 def newMovie 
-	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :director_name => params[:director_name], :plot => params[:plot])
+	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
+	
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		movie.actors << actor
 	end
+	
 	movie.save
+		
+	Director.get(params[:director_name]) << movie
 end
 
 post '/addMovie' do
