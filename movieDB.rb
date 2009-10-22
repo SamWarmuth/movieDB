@@ -1,7 +1,6 @@
 require 'rubygems'
 require 'sinatra'
 require 'dm-core'
-require 'dm-aggregates'
 require 'haml'
 
 
@@ -11,6 +10,7 @@ class Actor
 	property :name,	String, :key => true
 	property :age,	Integer
 	
+	has n, :movies, :through => Resource
 end
 
 class Movie
@@ -23,6 +23,7 @@ class Movie
 	property :mpaa_rating,	String
 	
 	belongs_to :director
+	has n, :actors, :through => Resource
 end
 
 class Director
@@ -36,7 +37,7 @@ end
 
 
 configure do
-	DataMapper.setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
+	DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
 
 	#Create/Upgrade All Tables!
 	DataMapper.auto_upgrade!
