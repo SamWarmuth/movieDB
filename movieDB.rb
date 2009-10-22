@@ -59,7 +59,8 @@ def newMovie
 	
 	movie.save
 	director = Director.get(params[:director_name])
-	director << movie if !director.nil?
+	director.movies << movie if !director.nil?
+	director.save
 end
 
 post '/addMovie' do
@@ -339,7 +340,9 @@ __END__
 	years old
 
 %h3
-
+	- actor.movies.each do |movie|
+		%p
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
 	
 %p
 	%a{:href => "/editActor/#{actor.name}"} Edit Actor
