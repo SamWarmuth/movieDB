@@ -1,2 +1,2 @@
-dm-core --version '=0.10.1'
+datamapper --version '=0.10.1'
 do_postgres --version '=0.10.0'
