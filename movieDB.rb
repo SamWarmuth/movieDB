@@ -1,10 +1,8 @@
 require 'rubygems'
 require 'sinatra'
 require 'datamapper'
-#require 'do_postgres'
+require 'do_postgres'
 require 'haml'
-require 'flix4r'
-
 
 	
 class Actor
