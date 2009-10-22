@@ -87,10 +87,7 @@ end
 
 get '/actors' do haml :listActors end
 
-get '/actor/:name' do
-	@name = params[:name]
-	haml :actorInfo 
-end
+get '/actor/:name' do haml :actorInfo end
 
 get '/addActor' do haml :addActor end
 
@@ -182,8 +179,7 @@ __END__
 			%form{:method => "POST", :action => "/search", :style => "font:14px/16px helvetica;"}
 				Search
 				%input{:type => "text", :size => "20", :name => "searchTerm"}
-		.content
-
+		%table
 			= yield
 
 			
@@ -335,7 +331,7 @@ __END__
 	%a{:href => "/addActor"} Add Actor
 	
 @@actorInfo
-- actor = Actor.get(@name)
+- actor = Actor.get(params[:name])
 %h1 
 	= actor.name
 %h2
