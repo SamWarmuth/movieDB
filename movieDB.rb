@@ -179,7 +179,7 @@ __END__
 			%form{:method => "POST", :action => "/search", :style => "font:14px/16px helvetica;"}
 				Search
 				%input{:type => "text", :size => "20", :name => "searchTerm"}
-		%table
+		.content
 			= yield
 
 			
