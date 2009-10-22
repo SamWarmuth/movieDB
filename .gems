@@ -1,2 +1,2 @@
-dm-core
-dm-aggregates
+dm-core --version '>=0.10.1'
+dm-aggregates --version '>=0.10.1'
