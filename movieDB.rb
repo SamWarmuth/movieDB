@@ -38,7 +38,6 @@ before do
 	headers "Content-Type" => "text/html; charset=utf-8"
 end
 
-
 get '/' do haml :index end
 
 post '/search' do haml :search end
@@ -61,7 +60,6 @@ def newMovie
 	movie.save
 	director = Director.get(params[:director_name])
 	director.movies << movie if !director.nil?
-	director.save
 end
 
 post '/addMovie' do
@@ -186,7 +184,6 @@ __END__
 
 			
 @@index
-= params[:agent][0]
 %h3 
 	Random Movie
 	-if Movie.all.length != 0
