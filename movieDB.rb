@@ -50,18 +50,12 @@ end
 
 get '/' do haml :index end
 
+#this takes over movies, addMovie, actors, addActor, director, addDirector
 get '/:page' do haml params[:page].to_sym end
 
 post '/search' do haml :search end
 
-
-get '/movies' do haml :movies end
 get '/movie/:title' do haml :movieInfo end
-get '/addMovie' do haml :addMovie end
-
-def newMovie 
-
-end
 
 post '/addMovie' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
@@ -90,9 +84,7 @@ post '/editMovie/:title' do
 		actor = Actor.get(name)
 		movie.actors << actor
 	end
-	
 	movie.save
-	
 	redirect "/movie/#{ params[:title] }"
 	
 end
@@ -103,9 +95,7 @@ get '/deleteMovie/:title' do
 	redirect '/movies'
 end
 
-get '/actors' do haml :actors end
 get '/actor/:name' do haml :actorInfo end
-get '/addActor' do haml :addActor end
 
 post '/addActor' do
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
@@ -130,11 +120,7 @@ get '/deleteActor/:name' do
 	redirect '/actors'
 end
 
-
-
-get '/directors' do haml :directors end
 get '/director/:name' do haml :directorInfo end
-get '/addDirector' do haml :addDirector end
 
 post '/addDirector' do
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
