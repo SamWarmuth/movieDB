@@ -50,11 +50,7 @@ end
 
 get '/' do haml :index end
 
-#/movies /addMovie /actors /addActor /director /addDirector
-get '/:page' do haml params[:page].to_sym end
 
-#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
-get '/:type/:key' do haml params[:type].to_sym end
 
 #POST. Don't delete (yet?)
 post '/search' do haml :search end
@@ -141,6 +137,12 @@ get '/deleteDirector/:name' do
 	director.destroy!
 	redirect '/directors'
 end
+
+#/movies /addMovie /actors /addActor /director /addDirector
+get '/:page' do haml params[:page].to_sym end
+
+#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
+get '/:type/:key' do haml params[:type].to_sym end
 
 helpers do
 	def text_input(lable, name, text="")
