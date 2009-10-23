@@ -78,7 +78,7 @@ post '/editMovie/:title' do
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
-		movie.actors << actor
+		movie.actors << actor if !(actor.nil?)
 	end
 	movie.save
 	redirect "/movie/#{ params[:title] }"
