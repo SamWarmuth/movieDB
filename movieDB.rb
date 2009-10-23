@@ -79,15 +79,12 @@ end
 
 get '/editMovie/:title' do haml :editMovie end
 
-post '/editMovie/:oldTitle' do
-	halt(400, "Invalid Movie Title") if (params[:title]=="")
-	movie = Movie.get(params[:oldTitle])
-	movie.title = params[:title] if !(params[:title] == params[:oldTitle])
+post '/editMovie/:title' do
+	movie = Movie.get(params[:title])
 	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot]}
 	movie.save
 	
-	"replaced #{params[:oldTitle]} with #{params[:title]}. Movie title is now #{movie.title}."
-	#redirect "/movie/#{ params[:title] }"
+	redirect "/movie/#{ params[:title] }"
 	
 end
 
