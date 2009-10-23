@@ -90,7 +90,7 @@ end
 
 get '/deleteMovie/:title' do
 	movie = Movie.get(params[:title])
-	movie.delete
+	movie.destroy!
 	redirect '/movies'
 end
 
