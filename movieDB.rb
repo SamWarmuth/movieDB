@@ -50,9 +50,12 @@ end
 
 get '/' do haml :index end
 
+get '/:page' do haml params[:page].to_sym end
+
 post '/search' do haml :search end
 
-get '/movies' do haml :listMovies end
+
+get '/movies' do haml :movies end
 get '/movie/:title' do haml :movieInfo end
 get '/addMovie' do haml :addMovie end
 
@@ -100,7 +103,7 @@ get '/deleteMovie/:title' do
 	redirect '/movies'
 end
 
-get '/actors' do haml :listActors end
+get '/actors' do haml :actors end
 get '/actor/:name' do haml :actorInfo end
 get '/addActor' do haml :addActor end
 
@@ -127,7 +130,9 @@ get '/deleteActor/:name' do
 	redirect '/actors'
 end
 
-get '/directors' do haml :listDirectors end
+
+
+get '/directors' do haml :directors end
 get '/director/:name' do haml :directorInfo end
 get '/addDirector' do haml :addDirector end
 
@@ -244,7 +249,7 @@ __END__
 			%p
 				%a{:href => "/director/#{director.name}"} #{director.name}
 
-@@listMovies
+@@movies
 %h1 Movies
 -Movie.all.each do |movie|
 	%strong 
@@ -321,7 +326,7 @@ __END__
 	%p	
 		%input{:type => "submit", :value => "Edit Movie"}
 	
-@@listActors
+@@actors
 %h1 Actors
 -Actor.all.each do |actor|
 	%strong 
@@ -367,7 +372,7 @@ __END__
 	%p	
 		%input{:type => "submit", :value => "Edit Actor"}
 	
-@@listDirectors
+@@directors
 %h1 Directors
 -Director.all.each do |director|
 	%strong
