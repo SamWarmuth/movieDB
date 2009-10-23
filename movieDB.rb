@@ -84,7 +84,9 @@ post '/editMovie/:oldTitle' do
 	movie = Movie.get(params[:oldTitle])
 	movie.attributes = {:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot]}
 	movie.save
-	redirect "/movie/#{ params[:title] }"
+	
+	"replaced #{params[:oldTitle]} with #{params[:title]}. Movie title is now #{movie.title}."
+	#redirect "/movie/#{ params[:title] }"
 	
 end
 
