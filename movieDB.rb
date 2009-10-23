@@ -50,12 +50,14 @@ end
 
 get '/' do haml :index end
 
-#this takes over movies, addMovie, actors, addActor, director, addDirector
+#/movies /addMovie /actors /addActor /director /addDirector
 get '/:page' do haml params[:page].to_sym end
 
-post '/search' do haml :search end
+#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
+get '/:type/:key' do haml params[:type].to_sym end
 
-get '/movie/:title' do haml :movieInfo end
+#POST. Don't delete (yet?)
+post '/search' do haml :search end
 
 post '/addMovie' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
@@ -74,7 +76,6 @@ post '/addMovie' do
 	redirect '/movies'
 end
 
-get '/editMovie/:title' do haml :editMovie end
 
 post '/editMovie/:title' do
 	movie = Movie.get(params[:title])
@@ -95,7 +96,6 @@ get '/deleteMovie/:title' do
 	redirect '/movies'
 end
 
-get '/actor/:name' do haml :actorInfo end
 
 post '/addActor' do
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
@@ -103,7 +103,6 @@ post '/addActor' do
 	redirect '/actors'
 end
 
-get '/editActor/:name' do haml :editActor end
 
 post '/editActor/:oldName' do
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -120,7 +119,6 @@ get '/deleteActor/:name' do
 	redirect '/actors'
 end
 
-get '/director/:name' do haml :directorInfo end
 
 post '/addDirector' do
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
@@ -128,7 +126,6 @@ post '/addDirector' do
 	redirect '/directors'
 end
 
-get '/editDirector/:name' do haml :editDirector end
 
 post '/editDirector/:oldName' do
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -251,8 +248,8 @@ __END__
 %p
 	%a{:href => "/addMovie"} Add Movie
 	
-@@movieInfo
-- movie = Movie.get(params[:title])
+@@movie
+- movie = Movie.get(params[:key])
 %h1
 	= movie.title
 	(#{movie.mpaa_rating})
@@ -295,7 +292,7 @@ __END__
 
 @@editMovie
 %h1 Edit Movie
-- movie = Movie.get(params[:title])
+- movie = Movie.get(params[:key])
 %p
 	= movie.title
 %form{:method => "POST", :action => "/editMovie/#{movie.title}"}
@@ -323,8 +320,8 @@ __END__
 %p
 	%a{:href => "/addActor"} Add Actor
 	
-@@actorInfo
-- actor = Actor.get(params[:name])
+@@actor
+- actor = Actor.get(params[:key])
 %h1 
 	= actor.name
 %h2
@@ -350,8 +347,8 @@ __END__
 	
 @@editActor
 %h1 Edit Actor
-- actor = Actor.get(params[:name])
-%form{:method => "POST", :action => "/editActor/#{params[:name]}"}
+- actor = Actor.get(params[:key])
+%form{:method => "POST", :action => "/editActor/#{params[:key]}"}
 	%table{:align => "center"}
 		= text_input("Name", "name", actor.name)
 		= text_input("Age", "age", actor.age)
@@ -369,8 +366,8 @@ __END__
 %p
 	%a{:href => "/addDirector"} Add Director
 
-@@directorInfo
-- director = Director.get(params[:name])
+@@director
+- director = Director.get(params[:key])
 %h1
 	= director.name
 %h2
@@ -397,8 +394,8 @@ __END__
 	
 @@editDirector
 %h1 Edit Director
-- director = Director.get(params[:name])
-%form{:method => "POST", :action => "/editDirector/#{params[:name]}"}
+- director = Director.get(params[:key])
+%form{:method => "POST", :action => "/editDirector/#{params[:key]}"}
 	%table{:align => "center"}
 		= text_input("Name", "name", director.name)
 		= text_input("Age", "age", director.age)
