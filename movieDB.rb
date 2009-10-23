@@ -209,7 +209,7 @@ __END__
 			= movie.length
 			minutes
 
-		%table{:width =>300}
+		%p
 			= movie.plot
 		-actors = movie.actors
 		-if (!actors[0].nil?)
