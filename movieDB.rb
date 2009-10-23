@@ -50,15 +50,12 @@ end
 
 get '/' do haml :index end
 
-
-
 #POST. Don't delete (yet?)
 post '/search' do haml :search end
 
 post '/addMovie' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
-	
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
@@ -67,8 +64,10 @@ post '/addMovie' do
 	
 	movie.save
 	director = Director.get(params[:director_name])
-	director.movies << movie if !director.nil?
-	director.save
+	if !director.nil?
+		director.movies << movie 
+		director.save
+	end
 	redirect '/movies'
 end
 
