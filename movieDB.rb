@@ -328,7 +328,7 @@ __END__
 %h1 
 	= actor.name
 %h2
-		= "#{actor.age} years old" if !actor.age.nil?
+		= "#{actor.age} years old" if !(actor.age == 0)
 %h3
 	- actor.movies.each do |movie|
 		%p
