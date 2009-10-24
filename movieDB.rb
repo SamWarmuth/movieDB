@@ -318,6 +318,7 @@ __END__
 	%strong 
 		%a{:href => "/actor/#{actor.name}"} #{actor.name}
 	= actor.age
+	, #{actor.movies.count} movies
 	years old
 	%br/
 %p
