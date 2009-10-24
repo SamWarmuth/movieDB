@@ -317,9 +317,8 @@ __END__
 -Actor.all.each do |actor|
 	%strong 
 		%a{:href => "/actor/#{actor.name}"} #{actor.name}
-	= actor.age
-	, #{actor.movies.count} movies
-	years old
+	= actor.movies.count
+	movies
 	%br/
 %p
 	%a{:href => "/addActor"} Add Actor
