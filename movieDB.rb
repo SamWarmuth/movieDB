@@ -318,7 +318,7 @@ __END__
 	%strong 
 		%a{:href => "/actor/#{actor.name}"} #{actor.name}
 	= actor.movies.count
-	movies
+	= actor.movies.count == 1 ? "movie" : "movies"
 	%br/
 %p
 	%a{:href => "/addActor"} Add Actor
@@ -328,8 +328,7 @@ __END__
 %h1 
 	= actor.name
 %h2
-	= actor.age
-	years old
+		= "#{actor.age} years old" if !actor.age.nil?
 %h3
 	- actor.movies.each do |movie|
 		%p
