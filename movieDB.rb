@@ -59,7 +59,8 @@ post '/addMovie' do
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
-		movie.actors << actor if !(actor.nil?)
+		actor = Actor.new( :name => name) if (actor.nil?)
+		movie.actors << actor
 	end
 	
 	movie.save
@@ -78,7 +79,8 @@ post '/editMovie/:title' do
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
-		movie.actors << actor if !(actor.nil?)
+		actor = Actor.new( :name => name) if (actor.nil?)
+		movie.actors << actor 
 	end
 	movie.save
 	redirect "/movie/#{ params[:title] }"
