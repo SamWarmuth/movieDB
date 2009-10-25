@@ -258,7 +258,7 @@ __END__
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
-.plot_summary{:style => "width: 450px;"}
+.plot_summary{:style => "width: 450px; text-align: center;"}
 	= movie.plot
 -actors = movie.actors
 -if (!actors[0].nil?)
