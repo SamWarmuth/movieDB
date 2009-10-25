@@ -189,7 +189,7 @@ __END__
 			= movie.length
 			minutes
 
-		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto;"}
+		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
 			= movie.plot
 		-actors = movie.actors
 		-if (!actors[0].nil?)
@@ -252,7 +252,7 @@ __END__
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
-%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto;"}
+		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
 	= movie.plot
 -actors = movie.actors
 -if (!actors[0].nil?)
