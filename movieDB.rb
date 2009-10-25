@@ -67,7 +67,6 @@ post '/addMovie' do
 	redirect '/movies'
 end
 
-
 post '/editMovie/:title' do
 	movie = Movie.get(params[:title])
 	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot]}
@@ -82,19 +81,17 @@ post '/editMovie/:title' do
 	
 end
 
-get '/deleteMovie/:title' do
-	movie = Movie.get(params[:title])
+get '/deleteMovie/:value' do
+	movie = Movie.get(params[:value])
 	movie.destroy!
 	redirect '/movies'
 end
-
 
 post '/addActor' do
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
 	actor.save
 	redirect '/actors'
 end
-
 
 post '/editActor/:oldName' do
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -105,19 +102,17 @@ post '/editActor/:oldName' do
 	redirect '/actors'
 end
 
-get '/deleteActor/:name' do
-	actor = Actor.get(params[:name])
+get '/deleteActor/:value' do
+	actor = Actor.get(params[:value])
 	actor.destroy!
 	redirect '/actors'
 end
-
 
 post '/addDirector' do
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
 	director.save
 	redirect '/directors'
 end
-
 
 post '/editDirector/:oldName' do
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -136,7 +131,6 @@ end
 
 #/movies /addMovie /actors /addActor /director /addDirector
 get '/:page' do haml params[:page].to_sym end
-
 #/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
 get '/:type/:key' do haml params[:type].to_sym end
 
@@ -258,7 +252,7 @@ __END__
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
-.plot_summary{:style => "width: 450px; text-align: center;"}
+%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto;"}
 	= movie.plot
 -actors = movie.actors
 -if (!actors[0].nil?)
