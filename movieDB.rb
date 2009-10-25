@@ -189,7 +189,7 @@ __END__
 			= movie.length
 			minutes
 
-		%p
+		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto;"}
 			= movie.plot
 		-actors = movie.actors
 		-if (!actors[0].nil?)
