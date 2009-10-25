@@ -33,20 +33,16 @@ end
 
 class Cast
 	include DataMapper::Resource
-	
 	property :id, Serial
 	belongs_to :movie
 	belongs_to :actor
 end
 
 DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
-#Create/Upgrade All Tables!
 DataMapper.auto_upgrade!
 
 #Use utf-8 for outgoing
-before do
-	headers "Content-Type" => "text/html; charset=utf-8"
-end
+before do headers "Content-Type" => "text/html; charset=utf-8" end
 
 get '/' do haml :index end
 
@@ -59,16 +55,15 @@ post '/addMovie' do
 	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
-		actor = Actor.new( :name => name) if (actor.nil?)
+		actor = Actor.new( :name => name, :age => 0) if (actor.nil?)
 		movie.actors << actor
 	end
 	
 	movie.save
 	director = Director.get(params[:director_name])
-	if !director.nil?
-		director.movies << movie 
-		director.save
-	end
+	director = Director.new(:name => params[:director_name], :age => 0) if director.nil?
+	director.movies << movie 
+	director.save
 	redirect '/movies'
 end
 
@@ -328,7 +323,7 @@ __END__
 %h1 
 	= actor.name
 %h2
-	= "#{actor.age} years old" if !(actor.age == 0)
+	= "#{actor.age} years old" if actor.age != 0
 %h3
 	- actor.movies.each do |movie|
 		%p
@@ -362,7 +357,9 @@ __END__
 -Director.all.each do |director|
 	%strong
 		%a{:href => "/director/#{director.name}"} #{director.name}
-	= director.age
+	= director.age if director.age != 0
+	= director.movies.count
+	= director.movies.count == 1 ? "movie" : "movies"
 	years old
 	%br/
 %p
