@@ -163,7 +163,7 @@ __END__
 				a:visited {color: #000000; text-decoration: none; }
 				a:hover {color: #000000; text-decoration: underline; }
 	%body{:style => "color: gray; margin-left: 75px; margin-right: 75px; font: 18px/20px helvetica; text-align: center;"}
-		%h1{:style => "text-align: center; margin-bottom: -25px;"}
+		%h1{:style => "margin-bottom: -25px;"}
 			%a{:href => "/"}
 				The Movie Database
 		%h4{:style => "text-align: center;"}
