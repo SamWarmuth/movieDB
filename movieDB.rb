@@ -357,10 +357,9 @@ __END__
 -Director.all.each do |director|
 	%strong
 		%a{:href => "/director/#{director.name}"} #{director.name}
-	= director.age if director.age != 0
 	= director.movies.count
 	= director.movies.count == 1 ? "movie" : "movies"
-	years old
+
 	%br/
 %p
 	%a{:href => "/addDirector"} Add Director
