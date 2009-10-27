@@ -274,8 +274,11 @@ __END__
 		%input{:type => "submit", :value => "Add Movie"}
 		
 @@editMovie
-%h1 Edit Movie
+
+%h1 
+	Edit Movie
 - movie = Movie.get(params[:key])
+= movie.plot.inspect
 %p
 	= movie.title
 %form{:method => "POST", :action => "/editMovie/#{movie.title}"}
