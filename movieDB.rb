@@ -51,7 +51,7 @@ post '/search' do haml :search end
 post '/addMovie' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	halt(400, "Invalid Director Name") if (params[:director_name]=="")	
-	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\n","<br />"))
+	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name, :age => 0) if (actor.nil?)
@@ -67,7 +67,7 @@ end
 
 post '/editMovie/:title' do
 	movie = Movie.get(params[:title])
-	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\n","<br />")}
+	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />")}
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name) if (actor.nil?)
