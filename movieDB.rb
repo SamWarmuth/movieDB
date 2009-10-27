@@ -341,11 +341,11 @@ __END__
 @@directors
 %h1 Directors
 -Director.all.each do |director|
-	%p
-		%strong
-			%a{:href => "/director/#{director.name}"} #{director.name}
-		= director.movies.count
-		= director.movies.count == 1 ? "movie" : "movies"
+	%strong
+		%a{:href => "/director/#{director.name}"} #{director.name}
+	= director.movies.count
+	= director.movies.count == 1 ? "movie" : "movies"
+	%br/
 %p
 	%a{:href => "/addDirector"} Add Director
 
