@@ -188,7 +188,8 @@ __END__
 				%br/
 			%h3
 				-actors.each do |actor|
-					%a{:href => "/actor/#{actor.name}"} #{actor.name}
+					%p
+						%a{:href => "/actor/#{actor.name}"} #{actor.name}
 					
 @@search
 -movies = Movie.all(:title.like => "%#{params[:searchTerm]}%")
