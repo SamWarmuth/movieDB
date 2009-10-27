@@ -68,7 +68,7 @@ end
 post '/editMovie/:key' do
 	movie = Movie.get(params[:key])
 	movie.destroy! if !movie.nil?
-	movie = Movie.new(:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
+	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name) if (actor.nil?)
