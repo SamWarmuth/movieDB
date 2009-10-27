@@ -11,7 +11,6 @@ class Actor
 	has n, :casts
 	has n, :movies, :through => :casts
 end
-
 class Movie
 	include DataMapper::Resource
 	property :title, 		String, :key => true
@@ -23,14 +22,12 @@ class Movie
 	has n, :casts
 	has n, :actors, :through => :casts
 end
-
 class Director
 	include DataMapper::Resource
 	property :name,	String, :key => true
 	property :age,	Integer
 	has n, :movies
 end
-
 class Cast
 	include DataMapper::Resource
 	property :id, Serial
@@ -44,21 +41,22 @@ DataMapper.auto_upgrade!
 #Use utf-8 for outgoing
 before do headers "Content-Type" => "text/html; charset=utf-8" end
 
-get '/' do haml :index end
+get '/' do 
+	haml :index
+end
 
 #POST. Don't delete (yet?)
 post '/search' do haml :search end
 
 post '/addMovie' do
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
+	halt(400, "Invalid Director Name") if (params[:director_name]=="")	
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot])
-	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name, :age => 0) if (actor.nil?)
 		movie.actors << actor
 	end
-	
 	movie.save
 	director = Director.get(params[:director_name])
 	director = Director.new(:name => params[:director_name], :age => 0) if director.nil?
@@ -70,24 +68,21 @@ end
 post '/editMovie/:title' do
 	movie = Movie.get(params[:title])
 	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot]}
-	
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name) if (actor.nil?)
 		movie.actors << actor 
 	end
 	movie.save
+	director = Director.get(params[:director_name])
+	director = Director.new(:name => params[:director_name], :age => 0) if director.nil?
+	director.movies << movie
+	director.save
 	redirect "/movie/#{ params[:title] }"
-	
-end
-
-get '/deleteMovie/:value' do
-	movie = Movie.get(params[:value])
-	movie.destroy!
-	redirect '/movies'
 end
 
 post '/addActor' do
+	halt(400, "Invalid Actor Name") if (params[:name]=="")
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
 	actor.save
 	redirect '/actors'
@@ -102,12 +97,6 @@ post '/editActor/:oldName' do
 	redirect '/actors'
 end
 
-get '/deleteActor/:value' do
-	actor = Actor.get(params[:value])
-	actor.destroy!
-	redirect '/actors'
-end
-
 post '/addDirector' do
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
 	director.save
@@ -115,7 +104,7 @@ post '/addDirector' do
 end
 
 post '/editDirector/:oldName' do
-	halt(400, "Invalid Actor Name") if (params[:name]=="")
+	halt(400, "Invalid Director Name") if (params[:name]=="")
 	director = Director.get(params[:oldName])
 	director.destroy!
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
@@ -123,13 +112,14 @@ post '/editDirector/:oldName' do
 	redirect '/directors'
 end
 
-get '/deleteDirector/:name' do
-	director = Director.get(params[:name])
-	director.destroy!
-	redirect '/directors'
+
+get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
+	record = eval("#{params[:type]}.get(params[:value])")
+	record.destroy!
+	redirect "/#{params[:type].downcase}s"
 end
 
-#/movies /addMovie /actors /addActor /director /addDirector
+#/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
 get '/:page' do haml params[:page].to_sym end
 #/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
 get '/:type/:key' do haml params[:type].to_sym end
@@ -152,15 +142,15 @@ __END__
 		%title= "The Movie Database"
 		%style{:type => "text/css", :media => "screen"}
 			:plain
-				a:link {color: #000000; text-decoration: none; }
-				a:active {color: #000000; text-decoration: none; }
-				a:visited {color: #000000; text-decoration: none; }
-				a:hover {color: #000000; text-decoration: underline; }
-	%body{:style => "color: gray; margin-left: 75px; margin-right: 75px; font: 18px/20px helvetica; text-align: center;"}
-		%h1{:style => "margin-bottom: -25px;"}
+				a:link {color: #78B52B; text-decoration: none; }
+				a:active {color: #78B52B; text-decoration: none; }
+				a:visited {color: #78B52B; text-decoration: none; }
+				a:hover {color: #CBFF4B; text-decoration: none; }
+	%body{:style => "color: #417D6F; margin-left: 75px; margin-right: 75px; font: 18px/20px helvetica; text-align: center; background-color: #FFFFFF;"}
+		%h1{:style => "color: #417D6F;margin-bottom: -25px;"}
 			%a{:href => "/"}
 				The Movie Database
-		%h4{:style => "text-align: center;"}
+		%h4{:style => "color: #417D6F;text-align: center;"}
 			%a{:href => "/movies"} Movies
 			|
 			%a{:href => "/actors"} Actors
@@ -199,8 +189,7 @@ __END__
 			%h3
 				-actors.each do |actor|
 					%a{:href => "/actor/#{actor.name}"} #{actor.name}
-					%br/
-
+					
 @@search
 -movies = Movie.all(:title.like => "%#{params[:searchTerm]}%")
 -actors = Actor.all(:name.like => "%#{params[:searchTerm]}%")
@@ -272,16 +261,17 @@ __END__
 %h1 Add Movie
 %form{:method => "POST", :action => "/addMovie"}
 	%table{:align => "center"}
-		= text_input("Title","title")
+		= text_input("Title *","title")
 		= text_input("Release Year","release_year")		
 		= text_input("Length (minutes)","length")
-		= text_input("Director Name","director_name")
+		= text_input("Director Name *","director_name")
 		= text_input("MPAA Rating","mpaa_rating")
 		= textarea_input("Plot Summary", "plot")
 		= textarea_input("Cast (comma separated)", "cast")
 	%p	
+		* Required
 		%input{:type => "submit", :value => "Add Movie"}
-
+		
 @@editMovie
 %h1 Edit Movie
 - movie = Movie.get(params[:key])
@@ -349,12 +339,11 @@ __END__
 @@directors
 %h1 Directors
 -Director.all.each do |director|
-	%strong
-		%a{:href => "/director/#{director.name}"} #{director.name}
-	= director.movies.count
-	= director.movies.count == 1 ? "movie" : "movies"
-
-	%br/
+	%p
+		%strong
+			%a{:href => "/director/#{director.name}"} #{director.name}
+		= director.movies.count
+		= director.movies.count == 1 ? "movie" : "movies"
 %p
 	%a{:href => "/addDirector"} Add Director
 
@@ -372,8 +361,7 @@ __END__
 %p
 	%a{:href => "/editDirector/#{director.name}"} Edit Director
 	|
-	%a{:href => "/deleteDirector/#{director.name}"} Delete Director
-		
+	%a{:href => "/deleteDirector/#{director.name}"} Delete Director	
 
 @@addDirector
 %h1 Add Director
