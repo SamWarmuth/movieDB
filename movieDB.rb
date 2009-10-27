@@ -279,9 +279,9 @@ __END__
 	Edit Movie
 - movie = Movie.get(params[:key])
 %p
-	= movie.title
 %form{:method => "POST", :action => "/editMovie/#{movie.title}"}
 	%table{:align => "center"}
+		= text_input("Movie Title", "title", movie.title)
 		= text_input("Release Year","release_year", movie.release_year)		
 		= text_input("Length (minutes)","length", movie.length.to_s)
 		= text_input("Director Name","director_name", movie.director.name.to_s)
