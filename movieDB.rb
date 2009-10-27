@@ -67,7 +67,7 @@ end
 
 post '/editMovie/:title' do
 	movie = Movie.get(params[:title])
-	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub('\n',"<p>")}
+	movie.attributes = {:release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub('\n',"END OF FUCKING LINE!!")}
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
 		actor = Actor.new( :name => name) if (actor.nil?)
