@@ -233,7 +233,7 @@ __END__
 %h1 Movies
 -Movie.all.each do |movie|
 	%strong 
-		%a{:href => "#", :class =>"toggle_box", :id => "c#{movie.title.gsub(/ /,'')}"} #{movie.title}
+		%a{:href => "#", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
 	(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
@@ -241,7 +241,7 @@ __END__
 		#{movie.director.name},
 	= movie.length
 	minutes
-	%div{:id => "#{movie.title.gsub(/ /,'')}", :class => "movieplot", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "movieplot", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		= movie.plot[0..270] << "..."
 		%br/
 		-movie.actors.each do |actor|
