@@ -45,7 +45,6 @@ get '/' do
 	haml :index
 end
 
-#POST. Don't delete (yet?)
 post '/search' do haml :search end
 
 post '/addMovie' do
@@ -67,11 +66,11 @@ end
 
 post '/editMovie/:key' do
 	movie = Movie.get(params[:key])
-	movie.destroy! if !movie.nil?
+	movie.destroy! unless movie.nil?
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
-		actor = Actor.new( :name => name) if (actor.nil?)
+		actor = Actor.new( :name => name) if actor.nil?
 		movie.actors << actor 
 	end
 	movie.save
@@ -147,6 +146,21 @@ __END__
 				a:active {color: #78B52B; text-decoration: none; }
 				a:visited {color: #78B52B; text-decoration: none; }
 				a:hover {color: #CBFF4B; text-decoration: none; }
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js">
+		</script>
+
+		<script type="text/javascript">
+		$(function() 
+		{
+		$('div.movieplot').hide();
+		$('.toggle_box').click(function()
+		{
+		title = this.id;
+		title = title.slice(1)
+		$('#'+title).slideToggle("slow");
+		});
+		});
+		</script>
 	%body{:style => "color: #417D6F; margin-left: 75px; margin-right: 75px; font: 18px/20px helvetica; text-align: center; background-color: #FFFFFF;"}
 		%h1{:style => "color: #417D6F;margin-bottom: -25px;"}
 			%a{:href => "/"}
@@ -175,7 +189,7 @@ __END__
 		%h2	
 			= movie.release_year
 			\-
-			-if !movie.director.nil?
+			-unless movie.director.nil?
 				%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 			= movie.length
 			minutes
@@ -183,7 +197,7 @@ __END__
 		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
 			= movie.plot
 		-actors = movie.actors
-		-if (!actors[0].nil?)
+		-unless actors[0].nil?
 			%h2
 				Actors
 				%br/
@@ -199,17 +213,17 @@ __END__
 %h1 
 	Searching for '#{params[:searchTerm]}'
 %h2
-	-if !(movies[0].nil?)
+	-unless movies[0].nil?
 		%p Movies
 		-movies.each do |movie|
 			%p
 				%a{:href => "/movie/#{movie.title}"} #{movie.title}
-	-if !(actors[0].nil?)	
+	-unless actors[0].nil?	
 		%p Actors
 		-actors.each do |actor|
 			%p
 				%a{:href => "/actor/#{actor.name}"} #{actor.name}
-	-if !(directors[0].nil?)	
+	-unless directors[0].nil?	
 		%p Directors
 		-directors.each do |director|
 			%p
@@ -219,15 +233,24 @@ __END__
 %h1 Movies
 -Movie.all.each do |movie|
 	%strong 
-		%a{:href => "/movie/#{movie.title}"} #{movie.title}
+		%a{:href => "#", :class =>"toggle_box", :id => "c#{movie.title.gsub(/ /,'')}"} #{movie.title}
 	(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
-	-if !movie.director.nil?
+	-unless movie.director.nil?
 		#{movie.director.name},
 	= movie.length
 	minutes
-	%br/
+	%div{:id => "#{movie.title.gsub(/ /,'')}", :class => "movieplot", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+		= movie.plot[0..270] << "..."
+		%br/
+		-movie.actors.each do |actor|
+			%a{:href => "/actor/#{actor.name}"} #{actor.name}, 
+		%br/
+		%strong
+			%a{:href => "/movie/#{movie.title}"} Full Info
+	%div
+			
 %p
 	%a{:href => "/addMovie"} Add Movie
 	
@@ -239,14 +262,14 @@ __END__
 %h2	
 	= movie.release_year
 	\-
-	-if !movie.director.nil?
+	-unless movie.director.nil?
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
 %p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
 	= movie.plot
 -actors = movie.actors
--if (!actors[0].nil?)
+-unless actors[0].nil?
 	%h2
 		Actors
 		%br/
