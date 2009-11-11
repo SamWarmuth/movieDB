@@ -217,18 +217,45 @@ __END__
 	-unless movies[0].nil?
 		%p Movies
 		-movies.each do |movie|
-			%p
-				%a{:href => "/movie/#{movie.title}"} #{movie.title}
+			%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
+			%br/
+			%br/
+			%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+				= movie.plot[0..270] << "..."
+				-movie.actors.each do |actor|
+					%a{:href => "/actor/#{actor.name}"} #{actor.name}, 
+				%br/
+				%strong
+					%a{:href => "/movie/#{movie.title}"} Full Info
+			%br/
 	-unless actors[0].nil?	
 		%p Actors
 		-actors.each do |actor|
-			%p
-				%a{:href => "/actor/#{actor.name}"} #{actor.name}
+			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
+			%br/
+			%br/
+			%div{:id => "#{actor.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+				Performed in
+				-actor.movies.each do |movie|
+					%a{:href => "/movie/#{movie.title}"} #{movie.title},
+				%br
+				%a{:href => "/actor/#{actor.name}"} Full Info
+			%br/
+			
 	-unless directors[0].nil?	
 		%p Directors
 		-directors.each do |director|
-			%p
-				%a{:href => "/director/#{director.name}"} #{director.name}
+			%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director .name.gsub(/[ \.]/,'')}"} #{director.name}
+			%br/
+			%br/
+			%div{:id => "#{director.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+				Directed
+				-director.movies.each do |movie|
+					%a{:href => "/movie/#{movie.title}"} #{movie.title},
+				%br
+				%a{:href => "/director/#{director.name}"} Full Info
+			%br/
+			
 
 @@movies
 %h1 Movies
@@ -374,7 +401,7 @@ __END__
 %h1 Directors
 -Director.all.each do |director|
 	%strong
-		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director.name.gsub(/[ \.]/,'')}"} #{director.name}
+		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director .name.gsub(/[ \.]/,'')}"} #{director.name}
 	= director.movies.count
 	= director.movies.count == 1 ? "movie" : "movies"
 	%br/
