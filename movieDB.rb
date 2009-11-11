@@ -152,12 +152,13 @@ __END__
 		<script type="text/javascript">
 		$(function() 
 		{
-		$('div.movieplot').hide();
+		$('div.hideme').hide();
 		$('.toggle_box').click(function()
 		{
-		title = this.id;
-		title = title.slice(1)
-		$('#'+title).slideToggle("slow");
+		key = this.id;
+		key = key.slice(1)
+		$('#'+key).slideToggle("slow");
+		return false;
 		});
 		});
 		</script>
@@ -233,7 +234,7 @@ __END__
 %h1 Movies
 -Movie.all.each do |movie|
 	%strong 
-		%a{:href => "#", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
+		%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
 	(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
@@ -241,7 +242,7 @@ __END__
 		#{movie.director.name},
 	= movie.length
 	minutes
-	%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "movieplot", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		= movie.plot[0..270] << "..."
 		%br/
 		-movie.actors.each do |actor|
@@ -321,10 +322,17 @@ __END__
 %h1 Actors
 -Actor.all.each do |actor|
 	%strong 
-		%a{:href => "/actor/#{actor.name}"} #{actor.name}
+		%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
 	= actor.movies.count
 	= actor.movies.count == 1 ? "movie" : "movies"
 	%br/
+	%div{:id => "#{actor.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+		Performed in
+		-actor.movies.each do |movie|
+			%a{:href => "/movie/#{movie.title}"} #{movie.title},
+		%br
+		%a{:href => "/actor/#{actor.name}"} Full Info
+		
 %p
 	%a{:href => "/addActor"} Add Actor
 	
@@ -366,10 +374,16 @@ __END__
 %h1 Directors
 -Director.all.each do |director|
 	%strong
-		%a{:href => "/director/#{director.name}"} #{director.name}
+		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director.name.gsub(/[ \.]/,'')}"} #{director.name}
 	= director.movies.count
 	= director.movies.count == 1 ? "movie" : "movies"
 	%br/
+	%div{:id => "#{director.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+		Directed
+		-director.movies.each do |movie|
+			%a{:href => "/movie/#{movie.title}"} #{movie.title},
+		%br
+		%a{:href => "/director/#{director.name}"} Full Info
 %p
 	%a{:href => "/addDirector"} Add Director
 
