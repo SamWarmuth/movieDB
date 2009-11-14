@@ -1,0 +1,8 @@
+%h1 Edit Director
+- director = Director.get(params[:key])
+%form{:method => "POST", :action => "/editDirector/#{params[:key]}"}
+	%table{:align => "center"}
+		= text_input("Name", "name", director.name)
+		= text_input("Age", "age", director.age)
+	%p	
+		%input{:type => "submit", :value => "Edit Director"}

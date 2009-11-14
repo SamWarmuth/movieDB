@@ -1,0 +1,16 @@
+%h1 Actors
+-Actor.all.each do |actor|
+	%strong 
+		%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
+	= actor.movies.count
+	= actor.movies.count == 1 ? "movie" : "movies"
+	%br/
+	%div{:id => "#{actor.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+		Performed in
+		-actor.movies.each do |movie|
+			%a{:href => "/movie/#{movie.title}"} #{movie.title},
+		%br
+		%a{:href => "/actor/#{actor.name}"} Full Info
+		
+%p
+	%a{:href => "/addActor"} Add Actor

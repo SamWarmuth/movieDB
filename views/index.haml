@@ -1,0 +1,26 @@
+%h3 
+	Random Movie
+	-if Movie.all.length != 0
+		-movie = Movie.all[rand(Movie.all.length)]
+		%h1
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
+			(#{movie.mpaa_rating})
+		%h2	
+			= movie.release_year
+			\-
+			-unless movie.director.nil?
+				%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
+			= movie.length
+			minutes
+
+		%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
+			= movie.plot
+		-actors = movie.actors
+		-unless actors[0].nil?
+			%h2
+				Actors
+				%br/
+			%h3
+				-actors.each do |actor|
+					%a{:href => "/actor/#{actor.name}"} #{actor.name}
+					%br/

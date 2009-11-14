@@ -1,0 +1,7 @@
+%h1 Add Director
+%form{:method => "POST", :action => "/addDirector"}
+	%table{:align => "center"}
+		= text_input("Name", "name")
+		= text_input("Age", "age")
+	%p	
+		%input{:type => "submit", :value => "Add Director"}

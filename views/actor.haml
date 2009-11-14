@@ -1,0 +1,13 @@
+- actor = Actor.get(params[:key])
+%h1 
+	= actor.name
+%h2
+	= "#{actor.age} years old" if actor.age != 0
+%h3
+	- actor.movies.each do |movie|
+		%a{:href => "/movie/#{movie.title}"} #{movie.title}
+		%br/
+%p
+	%a{:href => "/editActor/#{actor.name}"} Edit Actor
+	|
+	%a{:href => "/deleteActor/#{actor.name}"} Delete Actor

@@ -1,0 +1,14 @@
+- director = Director.get(params[:key])
+%h1
+	= director.name
+%h2
+	= director.age
+	years old
+%h3
+	- director.movies.each do |movie|
+		%p
+			%a{:href => "/movie/#{movie.title}"} #{movie.title}
+%p
+	%a{:href => "/editDirector/#{director.name}"} Edit Director
+	|
+	%a{:href => "/deleteDirector/#{director.name}"} Delete Director

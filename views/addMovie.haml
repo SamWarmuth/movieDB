@@ -1,0 +1,13 @@
+%h1 Add Movie
+%form{:method => "POST", :action => "/addMovie"}
+	%table{:align => "center"}
+		= text_input("Title *","title")
+		= text_input("Release Year","release_year")		
+		= text_input("Length (minutes)","length")
+		= text_input("Director Name *","director_name")
+		= text_input("MPAA Rating","mpaa_rating")
+		= textarea_input("Plot Summary", "plot")
+		= textarea_input("Cast (comma separated)", "cast")
+	%p	
+		* Required
+		%input{:type => "submit", :value => "Add Movie"}
