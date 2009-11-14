@@ -2,8 +2,9 @@
 %h1
 	= director.name
 %h2
-	= director.age
-	years old
+	-if director.age != 0
+		= director.age
+		years old
 %h3
 	- director.movies.each do |movie|
 		%p

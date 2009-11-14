@@ -14,18 +14,18 @@ class Actor
 end
 class Movie
 	include DataMapper::Resource
-	property :title, 		String, :key => true
-	property :release_year,	Integer
-	property :length,		Integer
-	property :plot,			Text
-	property :mpaa_rating,	String
+	property :title, String, :key => true
+	property :release_year, Integer
+	property :length, Integer
+	property :plot, Text
+	property :mpaa_rating, String
 	belongs_to :director
 	has n, :casts
 	has n, :actors, :through => :casts
 end
 class Director
 	include DataMapper::Resource
-	property :name,	String, :key => true
+	property :name, String, :key => true
 	property :age,	Integer
 	has n, :movies
 end
@@ -38,14 +38,10 @@ end
 
 DataMapper::setup(:default, ENV['DATABASE_URL'] || "sqlite3://#{Dir.pwd}/movieDB.db")
 DataMapper.auto_upgrade!
-
-#Use utf-8 for outgoing
 before do headers "Content-Type" => "text/html; charset=utf-8" end
 
 get '/' do haml :index end
-
 post '/search' do haml :search end
-
 post '/addMovie' do
 	require_admin
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
@@ -63,7 +59,6 @@ post '/addMovie' do
 	director.save
 	redirect '/movies'
 end
-
 post '/editMovie/:key' do
 	require_admin
 	movie = Movie.get(params[:key])
@@ -81,7 +76,6 @@ post '/editMovie/:key' do
 	director.save
 	redirect "/movie/#{ params[:title] }"
 end
-
 post '/addActor' do
 	require_admin
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -89,7 +83,6 @@ post '/addActor' do
 	actor.save
 	redirect '/actors'
 end
-
 post '/editActor/:oldName' do
 	require_admin
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
@@ -99,14 +92,12 @@ post '/editActor/:oldName' do
 	actor.save
 	redirect '/actors'
 end
-
 post '/addDirector' do
 	require_admin
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
 	director.save
 	redirect '/directors'
 end
-
 post '/editDirector/:oldName' do
 	require_admin
 	halt(400, "Invalid Director Name") if (params[:name]=="")
@@ -116,8 +107,6 @@ post '/editDirector/:oldName' do
 	director.save
 	redirect '/directors'
 end
-
-
 get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
 	require_admin
 	record = eval("#{params[:type]}.get(params[:value])")
@@ -125,10 +114,8 @@ get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
 	redirect "/#{params[:type].downcase}s"
 end
 
-#/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
-get '/:page' do haml params[:page].to_sym end
-#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
-get '/:type/:key' do haml params[:type].to_sym end
+get '/:page' do haml params[:page].to_sym end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
+get '/:type/:key' do haml params[:type].to_sym end	#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
 
 helpers do
 	include Sinatra::Authorization
@@ -138,5 +125,4 @@ helpers do
 	def textarea_input(lable, name, text="")
 		%{<tr><td> #{lable}</td><td><textarea rows="5" cols="23" name=#{name}>#{text}</textarea>}
 	end
-	
 end
