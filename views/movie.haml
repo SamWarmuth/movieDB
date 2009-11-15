@@ -15,11 +15,17 @@
 -unless actors[0].nil?
 	%h2
 		Actors
-		%br/
+		%br
 	%h3
 		-actors.each do |actor|
-			%a{:href => "/actor/#{actor.name}"} #{actor.name}
-			%br/
+			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
+			%br
+			%div{:id => "#{actor.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+				Performed in
+				-actor.movies.each do |movie|
+					%a{:href => "/movie/#{movie.title}"} #{movie.title},
+				%br
+				%a{:href => "/actor/#{actor.name}"} Full Info
 %p
 	%a{:href => "/editMovie/#{movie.title}"} Edit Movie		
 	|
