@@ -94,6 +94,7 @@ post '/editActor/:oldName' do
 end
 post '/addDirector' do
 	require_admin
+	halt(400, "Invalid Director Name") if (params[:name]=="")
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
 	director.save
 	redirect '/directors'

@@ -1,5 +1,14 @@
 %h1 Movies
--Movie.all.each do |movie|
+- params[:key]="title" if params[:key].nil?
+Sort by 
+%a{:href => "/movies/title"}Title
+|
+%a{:href => "/movies/release_year"}Year Released
+|
+%a{:href => "/movies/length"}Length
+%br
+%br
+-Movie.all(:order =>[params[:key].to_sym.asc]).each do |movie|
 	%strong 
 		%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
 	(#{movie.mpaa_rating})
@@ -11,10 +20,10 @@
 	minutes
 	%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		= movie.plot[0..270] << "..."
-		%br/
+		%br
 		-movie.actors.each do |actor|
 			%a{:href => "/actor/#{actor.name}"} #{actor.name}, 
-		%br/
+		%br
 		%strong
 			%a{:href => "/movie/#{movie.title}"} Full Info
 	%div
