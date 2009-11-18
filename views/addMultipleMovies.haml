@@ -1,6 +1,6 @@
 %h1 Add Multiple Movies
 Enter Movies, one movie on each line.
 %form{:method => "POST", :action => "/addMultipleMovies"}
-	= textarea_input("", "movielist")
+	= textarea_input("", "movielist",'', 20)
 	%br
 	%input{:type => "submit", :value => "Add Movies"}

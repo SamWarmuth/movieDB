@@ -158,7 +158,7 @@ helpers do
 	def jQ_clean(text)
 		text.gsub(/[ :&,'\.]/,'')
 	end
-	def textarea_input(lable, name, text="")
-		%{<tr><td> #{lable}</td><td><textarea rows="10" cols="23" name=#{name}>#{text}</textarea>}
+	def textarea_input(lable, name, text="",size=10)
+		%{<tr><td> #{lable}</td><td><textarea rows="#{size.to_s}" cols="23" name=#{name}>#{text}</textarea>}
 	end
 end
