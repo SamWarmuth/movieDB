@@ -21,7 +21,7 @@ Sort by
 		#{movie.director.name},
 	= movie.length
 	minutes
-	%div{:id => "#{movie.title.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{movie.title.gsub(/[ &\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		= movie.plot[0..270] << "..."
 		%br
 		-movie.actors.each do |actor|
