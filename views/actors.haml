@@ -1,7 +1,14 @@
+-params[:key] = "A" if params[:key].nil?
+-actors = Actor.all(:name.lt => (params[:key][0]+1).chr, :name.gt => params[:key])
+
 %h1 
 	Actors
-	(#{Actor.all.count})
--Actor.all.each do |actor|
+%p
+	= haml(:actorsAlph, :layout => false)
+%h2
+	= params[:key]
+	(#{actors.length})
+-actors.each do |actor|
 	%strong 
 		%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
 	= actor.movies.count
