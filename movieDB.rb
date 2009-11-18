@@ -70,7 +70,7 @@ post '/addMultipleMovies' do
 	params[:movielist].split(/[ ]?\r\n[ ]?/).each do |title|
 		next unless Movie.get(title).nil?
 		m = YAML.load(open("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+title.gsub(' ', '%20')).read)
-		next if m[0] == false || !m[0].is_a? Hash
+		next if (m[0] == false || !m[0].is_a? Hash)
 		result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
 		release_year = result['released'].split('-')[0]
 		movie = Movie.new(:title => result['name'], :release_year => release_year, :length => result['runtime'].to_i, :mpaa_rating => '', :plot => result['overview'])
