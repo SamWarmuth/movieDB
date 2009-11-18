@@ -7,10 +7,10 @@
 	-unless movies[0].nil?
 		%p Movies
 		-movies.each do |movie|
-			%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ :&,'\.]/,'')}"} #{movie.title}
+			%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{jQ_clean(movie.title)}"} #{movie.title}
 			%br/
 			%br/
-			%div{:id => "#{movie.title.gsub(/[ :&,'\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+			%div{:id => "#{jQ_clean(movie.title)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				= movie.plot[0..270] << "..."
 				-movie.actors.each do |actor|
 					%a{:href => "/actor/#{actor.name}"} #{actor.name}, 
@@ -21,10 +21,10 @@
 	-unless actors[0].nil?	
 		%p Actors
 		-actors.each do |actor|
-			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ :&,'\.]/,'')}"} #{actor.name}
+			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{jQ_clean(actor.name)}"} #{actor.name}
 			%br/
 			%br/
-			%div{:id => "#{actor.name.gsub(/[ :&,'\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+			%div{:id => "#{jQ_clean(actor.name)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				Performed in
 				-actor.movies.each do |movie|
 					%a{:href => "/movie/#{movie.title}"} #{movie.title},
@@ -35,10 +35,10 @@
 	-unless directors[0].nil?	
 		%p Directors
 		-directors.each do |director|
-			%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director.name.gsub(/[ :&,'\.]/,'')}"} #{director.name}
+			%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{jQ_clean(director.name)}"} #{director.name}
 			%br/
 			%br/
-			%div{:id => "#{director.name.gsub(/[ :&,'\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+			%div{:id => "#{jQ_clean(director.name)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				Directed
 				-director.movies.each do |movie|
 					%a{:href => "/movie/#{movie.title}"} #{movie.title},

@@ -69,7 +69,7 @@ post '/addMultipleMovies' do
 	API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
 	params[:movielist].split(/[ ]?\r\n[ ]?/).each do |title|
 		next unless Movie.get(title).nil?
-		m = YAML.load(open("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+title.gsub(' ', '%20')).read)
+		m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+title)).read)
 		next if (m[0] == false || !m[0].is_a?(Hash))
 		result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
 		release_year = result['released'].split('-')[0]
@@ -154,6 +154,9 @@ helpers do
 	include Sinatra::Authorization
 	def text_input(lable, name, text="")
 		%{<tr><td> #{lable}</td><td><input type="text" size="25" name="#{name}" value="#{text}">}
+	end
+	def jQ_clean(text)
+		text.gsub(/[ :&,'\.]/,'')
 	end
 	def textarea_input(lable, name, text="")
 		%{<tr><td> #{lable}</td><td><textarea rows="10" cols="23" name=#{name}>#{text}</textarea>}
