@@ -62,7 +62,7 @@ post '/addMovie' do
 	director = Director.new(:name => params[:director_name], :age => 0) if director.nil?
 	director.movies << movie 
 	director.save
-	redirect '/movies'
+	redirect '/movie/'+movie.title
 end
 post '/addMultipleMovies' do
 	require_admin
