@@ -1,4 +1,10 @@
 - movie = Movie.get(params[:key])
+- API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
+- m = YAML.load(open("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+movie.title.gsub(' ', '%20')).read)
+- result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
+- poster = ''
+- result['posters'].each do |image|
+	-poster = image['image']['url'] if image['image']['size'] == "cover"
 %h1
 	= movie.title
 	-if movie.mpaa_rating != ""
@@ -10,8 +16,13 @@
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
-%p.blocktext{:style => "width: 24em;margin-left: auto; margin-right: auto; text-align: left"}
-	= movie.plot
+%table{:style => "width: 30em; margin-left: auto; margin-right: auto; text-align: left;"}
+	%tr
+		%td
+			-unless poster == ''
+				%img{:src => poster}
+		%td
+			= movie.plot
 -actors = movie.actors
 -unless actors[0].nil?
 	%h2
