@@ -1,0 +1,22 @@
+%h1 Add Movie
+- API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
+- m = YAML.load(open("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+params[:title].gsub(' ', '%20')).read)
+- movie = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
+- director = ''
+- actors = []
+- movie['cast'].each do |person|
+	-director = person['name'] if person['job'] == "Director"
+	-actors << person['name'] if person['job'] == "Actor"
+
+%form{:method => "POST", :action => "/addMovie"}
+	%table{:align => "center"}
+		= text_input("Title *","title", movie['name'])
+		= text_input("Release Year","release_year", movie['released'].split('-')[0])		
+		= text_input("Length (minutes)","length",movie['runtime'])
+		= text_input("Director Name *","director_name", director ? director : "")
+		= text_input("MPAA Rating","mpaa_rating")
+		= textarea_input("Plot Summary", "plot", movie['overview'])
+		= textarea_input("Cast (comma separated)", "cast", actors.join(', '))
+	%p	
+		* Required
+		%input{:type => "submit", :value => "Add Movie"}

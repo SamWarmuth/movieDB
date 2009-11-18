@@ -4,6 +4,8 @@ require 'datamapper'
 require 'do_postgres'
 require 'haml'
 require 'lib/authorization'
+require 'yaml'
+require 'open-uri'
 	
 class Actor
 	include DataMapper::Resource
@@ -42,7 +44,10 @@ before do headers "Content-Type" => "text/html; charset=utf-8" end
 
 get '/' do haml :index end
 post '/search' do haml :search end
+post '/autofill' do haml :autofill end
+	
 post '/addMovie' do
+	redirect '/autofill' if params[:submit] == 'autofill'
 	require_admin
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	halt(400, "Invalid Director Name") if (params[:director_name]=="")	
@@ -57,6 +62,31 @@ post '/addMovie' do
 	director = Director.new(:name => params[:director_name], :age => 0) if director.nil?
 	director.movies << movie 
 	director.save
+	redirect '/movies'
+end
+post '/addMultipleMovies' do
+	require_admin
+	API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
+	params[:movielist].split(/[ ]?\r\n[ ]?/).each do |title|
+		m = YAML.load(open("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+title.gsub(' ', '%20')).read)
+		result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
+		release_year = result['released'].split('-')[0]
+		movie = Movie.new(:title => result['name'], :release_year => release_year, :length => result['runtime'].to_i, :mpaa_rating => '', :plot => result['overview'])
+		dirname = ''
+		result['cast'].each do |person|
+			dirname = person['name'] if person['job'] == "Director"
+			if person['job'] == "Actor"
+				actor = Actor.get(person['name'])
+				actor = Actor.new( :name => person['name'], :age => 0) if (actor.nil?)
+				movie.actors << actor
+			end
+		end
+		movie.save
+		director = Director.get(dirname)
+		director = Director.new(:name => dirname, :age => 0) if director.nil?
+		director.movies << movie
+		director.save
+	end
 	redirect '/movies'
 end
 post '/editMovie/:key' do
@@ -124,6 +154,6 @@ helpers do
 		%{<tr><td> #{lable}</td><td><input type="text" size="25" name="#{name}" value="#{text}">}
 	end
 	def textarea_input(lable, name, text="")
-		%{<tr><td> #{lable}</td><td><textarea rows="5" cols="23" name=#{name}>#{text}</textarea>}
+		%{<tr><td> #{lable}</td><td><textarea rows="10" cols="23" name=#{name}>#{text}</textarea>}
 	end
 end

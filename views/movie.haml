@@ -1,7 +1,8 @@
 - movie = Movie.get(params[:key])
 %h1
 	= movie.title
-	(#{movie.mpaa_rating})
+	-if movie.mpaa_rating != ""
+		(#{movie.mpaa_rating})
 %h2	
 	= movie.release_year
 	\-

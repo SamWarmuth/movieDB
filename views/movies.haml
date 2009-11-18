@@ -1,4 +1,6 @@
-%h1 Movies
+%h1
+	Movies
+	(#{Movie.all.count})
 - params[:key]="title" if params[:key].nil?
 Sort by 
 %a{:href => "/movies/title"}Title
@@ -11,7 +13,8 @@ Sort by
 -Movie.all(:order =>[params[:key].to_sym.asc]).each do |movie|
 	%strong 
 		%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{movie.title.gsub(/[ \.]/,'')}"} #{movie.title}
-	(#{movie.mpaa_rating})
+	-if movie.mpaa_rating != ""
+		(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
 	-unless movie.director.nil?
@@ -30,4 +33,6 @@ Sort by
 			
 %p
 	%a{:href => "/addMovie"} Add Movie
+	|
+	%a{:href => "/addMultipleMovies"} Add Multiple Movies
 	

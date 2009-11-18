@@ -1,4 +1,9 @@
 %h1 Add Movie
+%form{:method => "POST", :action => "/autofill"}
+	= text_input("Title","title")
+	%input{:type => "submit", :value => "Autofill"}
+%p ____
+
 %form{:method => "POST", :action => "/addMovie"}
 	%table{:align => "center"}
 		= text_input("Title *","title")
