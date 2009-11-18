@@ -1,4 +1,6 @@
-%h1 Directors
+%h1 
+	Directors
+	(#{Director.all.count})
 -Director.all.each do |director|
 	%strong
 		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director .name.gsub(/[ \.]/,'')}"} #{director.name}

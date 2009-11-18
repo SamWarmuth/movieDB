@@ -1,4 +1,6 @@
-%h1 Actors
+%h1 
+	Actors
+	(#{Actor.all.count})
 -Actor.all.each do |actor|
 	%strong 
 		%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
