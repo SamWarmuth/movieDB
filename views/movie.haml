@@ -30,9 +30,9 @@
 		%br
 	%h3
 		-actors.each do |actor|
-			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ \.]/,'')}"} #{actor.name}
+			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{actor.name.gsub(/[ :&,'\.]/,'')}"} #{actor.name}
 			%br
-			%div{:id => "#{actor.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+			%div{:id => "#{actor.name.gsub(/[ :&,'\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				Performed in
 				-actor.movies.each do |movie|
 					%a{:href => "/movie/#{movie.title}"} #{movie.title},

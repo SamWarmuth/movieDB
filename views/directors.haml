@@ -3,11 +3,11 @@
 	(#{Director.all.count})
 -Director.all.each do |director|
 	%strong
-		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director .name.gsub(/[ \.]/,'')}"} #{director.name}
+		%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{director.name.gsub(/[ :&,'\.]/,'')}"} #{director.name}
 	= director.movies.count
 	= director.movies.count == 1 ? "movie" : "movies"
 	%br/
-	%div{:id => "#{director.name.gsub(/[ \.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{director.name.gsub(/[ :&,'\.]/,'')}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		Directed
 		-director.movies.each do |movie|
 			%a{:href => "/movie/#{movie.title}"} #{movie.title},
