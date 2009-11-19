@@ -4,14 +4,15 @@
 	Movies
 	(#{movies.count})
 %p
-	List View |
-	%a{:href => "/posterview"}Poster View
+	List View
+	|
+	%a{:href => "/posterview/"+params[:key]}Poster View
 Sort by 
-%a{:href => "/movies/title"}Title
+= params[:key] == "title" ? "Title" : "<a href='/movies/title'>Title</a>"
 |
-%a{:href => "/movies/release_year"}Year Released
+= params[:key] == "release_year" ? "Year Released" : "<a href='/movies/release_year'>Year Released</a>"
 |
-%a{:href => "/movies/length"}Length
+= params[:key] == "length" ? "Length" : "<a href='/movies/length'>Length</a>"
 %br
 %br
 -movies.each do |movie|
