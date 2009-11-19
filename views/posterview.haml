@@ -1,7 +1,12 @@
 - params[:key]="title" if params[:key].nil?
 - movies = Movie.all(:order =>[params[:key].to_sym.asc])
 -load_limit = 0
-
+%h1
+	Movies
+	(#{movies.count})
+%p
+	%a{:href => "/movies"}List View
+	| Poster View
 Sort by 
 %a{:href => "/posterview/title"}Title
 |
