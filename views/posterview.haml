@@ -1,5 +1,13 @@
--movies = Movie.all
+- params[:key]="title" if params[:key].nil?
+- movies = Movie.all(:order =>[params[:key].to_sym.asc])
 -load_limit = 0
+
+Sort by 
+%a{:href => "/posterview/title"}Title
+|
+%a{:href => "/posterview/release_year"}Year Released
+|
+%a{:href => "/posterview/length"}Length
 %br
 -movies.each do |movie|
 	-if load_limit > 10
