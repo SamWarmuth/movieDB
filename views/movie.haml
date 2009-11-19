@@ -1,10 +1,14 @@
 - movie = Movie.get(params[:key])
 - return 'ERROR: Movie #{params[:key]} not found' if movie.nil?
-- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
 - poster = ''
--if result.is_a? Hash
-	-result['posters'].each do |image|
-		-poster = image['image']['url'] if image['image']['size'] == "cover"
+-if $Poster_urls[movie.title].nil?
+	-result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
+	-if result.is_a? Hash
+		-result['posters'].each do |image|
+			-poster = image['image']['url'] if image['image']['size'] == "cover"
+	-$Poster_urls[movie.title]=poster unless poster == ''
+-else
+	- poster = $Poster_urls[movie.title]
 %h1
 	= movie.title
 	-if movie.mpaa_rating != ""
