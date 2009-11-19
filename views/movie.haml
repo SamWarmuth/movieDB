@@ -1,5 +1,5 @@
 - movie = Movie.get(params[:key])
-- return haml("= 'ERROR: Movie #{params[:key]} not found' if movie.nil?")
+- return 'ERROR: Movie #{params[:key]} not found' if movie.nil?
 - m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)
 - result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ $API_KEY + '/' + m[0]["id"].to_s).read)[0]
 - poster = ''
