@@ -50,6 +50,7 @@ post '/autofill' do haml :autofill end
 post '/addMovie' do
 	redirect '/autofill' if params[:submit] == 'autofill'
 	require_admin
+	params[:title].strip!
 	halt(400, "Invalid Movie Title") if (params[:title]=="")
 	halt(400, "Invalid Director Name") if (params[:director_name]=="")	
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
@@ -73,6 +74,7 @@ post '/addMultipleMovies' do
 		next if (m[0] == false || !m[0].is_a?(Hash))
 		result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+$API_KEY + '/' + m[0]["id"].to_s).read)[0]
 		release_year = result['released'].split('-')[0]
+		result['name'].strip!
 		movie = Movie.new(:title => result['name'], :release_year => release_year, :length => result['runtime'].to_i, :mpaa_rating => '', :plot => result['overview'])
 		dirname = ''
 		result['cast'].each do |person|
@@ -95,6 +97,7 @@ post '/editMovie/:key' do
 	require_admin
 	movie = Movie.get(params[:key])
 	movie.destroy! unless movie.nil?
+	params[:title].strip!
 	movie = Movie.new(:title => params[:title], :release_year => params[:release_year].to_i, :length => params[:length].to_i, :mpaa_rating => params[:mpaa_rating], :plot => params[:plot].gsub("\r\n","<br />"))
 	params[:cast].split(/[ ]?,[ ]?/).each do |name|
 		actor = Actor.get(name)
@@ -110,6 +113,7 @@ post '/editMovie/:key' do
 end
 post '/addActor' do
 	require_admin
+	params[:name].strip!
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
 	actor = Actor.new(:name => params[:name], :age => params[:age].to_i)
 	actor.save
@@ -117,6 +121,7 @@ post '/addActor' do
 end
 post '/editActor/:oldName' do
 	require_admin
+	params[:name].strip!
 	halt(400, "Invalid Actor Name") if (params[:name]=="")
 	actor = Actor.get(params[:oldName])
 	actor.destroy!
@@ -126,6 +131,7 @@ post '/editActor/:oldName' do
 end
 post '/addDirector' do
 	require_admin
+	params[:name].strip!
 	halt(400, "Invalid Director Name") if (params[:name]=="")
 	director = Director.new(:name => params[:name], :age => params[:age].to_i)
 	director.save
@@ -133,6 +139,7 @@ post '/addDirector' do
 end
 post '/editDirector/:oldName' do
 	require_admin
+	params[:name].strip!
 	halt(400, "Invalid Director Name") if (params[:name]=="")
 	director = Director.get(params[:oldName])
 	director.destroy!
