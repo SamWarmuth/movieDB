@@ -10,7 +10,7 @@
 %h1 
 	= actor.name
 %h2
-	= "#{actor.age} years old" if actor.age != 0
+	= "#{actor.age} years old" if actor.age != 0 && !actor.age.nil?
 %h3
 	- actor.movies.each do |movie|
 		%a{:href => "/movie/#{movie.title}"} #{movie.title}
