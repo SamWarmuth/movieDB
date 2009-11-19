@@ -1,7 +1,6 @@
 - movie = Movie.get(params[:key])
 - return 'ERROR: Movie #{params[:key]} not found' if movie.nil?
-- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)
-- result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ $API_KEY + '/' + m[0]["id"].to_s).read)[0]
+- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
 - poster = ''
 -if result.is_a? Hash
 	-result['posters'].each do |image|

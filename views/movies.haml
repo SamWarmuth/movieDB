@@ -14,8 +14,6 @@ Sort by
 -movies.each do |movie|
 	%strong 
 		%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{jQ_clean(movie.title)}"} #{movie.title}
-	-if movie.mpaa_rating != ""
-		(#{movie.mpaa_rating})
 	= movie.release_year
 	\-
 	-unless movie.director.nil?

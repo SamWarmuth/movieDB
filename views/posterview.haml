@@ -1,0 +1,8 @@
+-movies = Movie.all
+-movies.each do |movie|
+	- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
+	- poster = ''
+	-if result.is_a? Hash
+		-result['posters'].each do |image|
+			-poster = image['image']['url'] if image['image']['size'] == "cover"
+	%img{:src => poster}
