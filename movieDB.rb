@@ -44,6 +44,7 @@ DataMapper.auto_upgrade!
 before do headers "Content-Type" => "text/html; charset=utf-8" end
 
 get '/' do haml :index end
+get '/favicon.ico' do redirect 'http://harpastum.googlepages.com/favicon.ico' end 
 post '/search' do haml :search end
 post '/autofill' do haml :autofill end
 	
