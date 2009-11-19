@@ -2,7 +2,9 @@
 -load_limit = 0
 %br
 -movies.each do |movie|
-	-break if load_limit > 10
+	-if load_limit > 10
+		Poster Collection Not Complete. 10 Posters added every time you load this page.
+		-break
 	- poster = ''
 	-if $Poster_urls[movie.title].nil?
 		-load_limit += 1
@@ -13,4 +15,5 @@
 		-$Poster_urls[movie.title]=poster unless poster == ''
 	-else
 		- poster = $Poster_urls[movie.title]
-	%img{:src => poster}
+	%a{:href => "/movie/"+movie.title}
+		%img{:src => poster}
