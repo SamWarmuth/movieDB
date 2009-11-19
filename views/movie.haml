@@ -1,10 +1,11 @@
 - movie = Movie.get(params[:key])
-- API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
-- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+movie.title)).read)
-- result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
+- return "ERROR: Movie '#{params[:key]}' not found" if movie.nil?
+- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)
+- result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ $API_KEY + '/' + m[0]["id"].to_s).read)[0]
 - poster = ''
-- result['posters'].each do |image|
-	-poster = image['image']['url'] if image['image']['size'] == "cover"
+-if result.is_a? Hash
+	-result['posters'].each do |image|
+		-poster = image['image']['url'] if image['image']['size'] == "cover"
 %h1
 	= movie.title
 	-if movie.mpaa_rating != ""
@@ -34,11 +35,12 @@
 			%br
 			%div{:id => "#{jQ_clean(actor.name)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				Performed in
-				-actor.movies.each do |movie|
-					%a{:href => "/movie/#{movie.title}"} #{movie.title},
+				-actor.movies.each do |mov|
+					%a{:href => "/movie/#{mov.title}"} #{mov.title},
 				%br
 				%a{:href => "/actor/#{actor.name}"} Full Info
 %p
 	%a{:href => "/editMovie/#{movie.title}"} Edit Movie		
 	|
 	%a{:href => "/deleteMovie/#{movie.title}"} Delete Movie
+=movie.title

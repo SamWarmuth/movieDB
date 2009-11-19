@@ -1,6 +1,5 @@
 - actor = Actor.get(params[:key])
-- API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
-- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Person.search/en/yaml/"+API_KEY+'/'+actor.name)).read)[0]
+- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Person.search/en/yaml/"+$API_KEY+'/'+actor.name)).read)[0]
 - profile_picture = ''
 -unless result['profile'].nil?
 	-result['profile'].each do |image|

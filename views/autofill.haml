@@ -1,7 +1,6 @@
 %h1 Add Movie
-- API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
-- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+API_KEY+'/'+params[:title])).read)
-- movie = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+ API_KEY + '/' + m[0]["id"].to_s).read)[0]
+- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+params[:title])).read)
+- movie = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+$API_KEY + '/' + m[0]["id"].to_s).read)[0]
 - director = ''
 - actors = []
 - movie['cast'].each do |person|
