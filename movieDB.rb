@@ -89,6 +89,7 @@ post '/addMultipleMovies' do
 		end
 		movie.save
 		dirname.strip!
+		dirname = "Unknown" if dirname == ''
 		director = Director.get(dirname)
 		director = Director.new(:name => dirname, :age => 0) if director.nil?
 		director.movies << movie
@@ -159,14 +160,16 @@ end
 
 get '/:page' do haml params[:page].to_sym end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
 get '/:type/:key' do haml params[:type].to_sym end	#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
-
+not_found do
+	Haml("You're looking for a page that doesn't exist. Sorry.")
+end
 helpers do
 	include Sinatra::Authorization
 	def text_input(lable, name, text="")
 		%{<tr><td> #{lable}</td><td><input type="text" size="25" name="#{name}" value="#{text}">}
 	end
 	def jQ_clean(text)
-		text.gsub(/[ :&,'!\.]/,'')
+		text.gsub(/[ :&,()'!\.]/,'')
 	end
 	def textarea_input(lable, name, text="",size=10)
 		%{<tr><td> #{lable}</td><td><textarea rows="#{size.to_s}" cols="23" name=#{name}>#{text}</textarea>}
