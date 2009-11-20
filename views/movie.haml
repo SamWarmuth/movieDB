@@ -2,13 +2,18 @@
 - return 'ERROR: Movie #{params[:key]} not found' if movie.nil?
 - poster = ''
 -if $Poster_urls[movie.title].nil?
-	-result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
+	- m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
+	- result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+$API_KEY + '/' + m["id"].to_s).read)[0]
+
 	-if result.is_a? Hash
 		-result['posters'].each do |image|
 			-poster = image['image']['url'] if image['image']['size'] == "cover"
 	-$Poster_urls[movie.title]=poster unless poster == ''
 -else
 	- poster = $Poster_urls[movie.title]
+- trailer = (result['trailer'].nil? ? "" : result['trailer'])
+- trailer.gsub!('http://www.youtube.com/watch?v=',"")
+
 %h1
 	= movie.title
 	-if movie.mpaa_rating != ""
@@ -20,6 +25,10 @@
 		%a{:href => "/director/#{movie.director.name}"} #{movie.director.name}
 	= movie.length
 	minutes
+	-if trailer != ''
+		%a{:href => trailer,:style => "font: 14px/16px helvetica;", :class =>"toggle_box", :id => "c#{jQ_clean(movie.title)}trailer"} Trailer
+%div{:id => "#{jQ_clean(movie.title)}trailer", :style => "display: none; font: 14px/16px helvetica; width:500px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/#{trailer}&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/#{trailer}&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>
 %table{:style => "width: 30em; margin-left: auto; margin-right: auto; text-align: left;"}
 	%tr
 		%td
