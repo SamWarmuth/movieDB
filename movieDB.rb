@@ -80,6 +80,7 @@ post '/addMultipleMovies' do
 		movie = Movie.new(:title => result['name'], :release_year => release_year, :length => result['runtime'].to_i, :mpaa_rating => '', :plot => result['overview'])
 		dirname = ''
 		result['cast'].each do |person|
+			person['name'].strip!
 			dirname = person['name'] if person['job'] == "Director"
 			if person['job'] == "Actor"
 				actor = Actor.get(person['name'])
