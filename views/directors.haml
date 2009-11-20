@@ -7,7 +7,7 @@
 	= director.movies.count
 	= director.movies.count == 1 ? "movie" : "movies"
 	%br/
-	%div{:id => "#{jQ_clean(director.name)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{jQ_clean(director.name)}", :style => "display: none; font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		Directed
 		-director.movies.each do |movie|
 			%a{:href => "/movie/#{movie.title}"} #{movie.title},

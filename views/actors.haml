@@ -14,7 +14,7 @@
 	= actor.movies.count
 	= actor.movies.count == 1 ? "movie" : "movies"
 	%br/
-	%div{:id => "#{jQ_clean(actor.name)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+	%div{:id => "#{jQ_clean(actor.name)}", :style => "display: none; font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		Performed in
 		-actor.movies.each do |movie|
 			%a{:href => "/movie/#{movie.title}"} #{movie.title},
