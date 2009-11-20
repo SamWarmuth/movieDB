@@ -70,6 +70,7 @@ end
 post '/addMultipleMovies' do
 	require_admin
 	params[:movielist].split(/[ ]?\r\n[ ]?/).each do |title|
+		title.strip!
 		next unless Movie.get(title).nil?
 		m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+title)).read)
 		next if (m[0] == false || !m[0].is_a?(Hash))
@@ -87,6 +88,7 @@ post '/addMultipleMovies' do
 			end
 		end
 		movie.save
+		dirname.strip!
 		director = Director.get(dirname)
 		director = Director.new(:name => dirname, :age => 0) if director.nil?
 		director.movies << movie

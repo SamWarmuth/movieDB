@@ -27,9 +27,6 @@ Sort by
 	%div{:id => "#{jQ_clean(movie.title)}", :class => "hideme", :style => "font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 		= movie.plot[0..270] << "..."
 		%br
-		-movie.actors.each do |actor|
-			%a{:href => "/actor/#{actor.name}"} #{actor.name}, 
-		%br
 		%strong
 			%a{:href => "/movie/#{movie.title}"} Full Info
 	%div
