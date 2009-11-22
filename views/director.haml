@@ -1,8 +1,5 @@
 - director = Director.get(params[:key])
-- result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Person.search/en/yaml/"+$API_KEY+'/'+director.name)).read)[0]
-- profile_picture = ''
-- result['profile'].each do |image|
-	-profile_picture = image['image']['url'] if image['image']['size'] == "profile"
+
 %h1
 	= director.name
 %h2
