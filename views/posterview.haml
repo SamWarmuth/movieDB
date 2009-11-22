@@ -16,19 +16,19 @@ Sort by
 %br
 %br
 -movies.each do |movie|
-	-if load_limit > 10
-		%br
-		Poster Collection Not Complete. 10 Posters added every time you load this page.
-		-break
 	- poster = ''
 	-if $Poster_urls[movie.title].nil?
+		-next if load_limit > 15
 		-load_limit += 1
 		-result = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
 		-if result.is_a? Hash
 			-result['posters'].each do |image|
 				-poster = image['image']['url'] if image['image']['size'] == "cover"
-		-$Poster_urls[movie.title]=poster unless poster == ''
+		-$Poster_urls[movie.title]=poster
 	-else
 		- poster = $Poster_urls[movie.title]
-	%a{:href => "/movie/"+movie.title}
-		%img{:src => poster}
+	-unless poster == ''
+		%a{:href => "/movie/"+movie.title}
+			%img{:src => poster}
+-if load_limit >15
+	Poster Collection Incomplete. 15 Posters added every time this page is loaded.
