@@ -1,6 +1,6 @@
 - params[:key]="title" if params[:key].nil?
 - movies = Movie.all(:order =>[params[:key].to_sym.asc])
--load_limit = 0
+-load_limit = 1
 %h1
 	Movies
 	(#{movies.count})
@@ -31,4 +31,5 @@ Sort by
 		%a{:href => "/movie/"+movie.title}
 			%img{:src => poster}
 -if load_limit >15
+	%br
 	Poster Collection Incomplete. 15 Posters added every time this page is loaded.
