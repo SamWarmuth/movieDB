@@ -1,41 +1,41 @@
-!!!
-%html
-	%head
-		%title= "The Movie Database"
-		%style{:type => "text/css", :media => "screen"}
-			:plain
-				a:link {color: #78B52B; text-decoration: none; }
-				a:active {color: #78B52B; text-decoration: none; }
-				a:visited {color: #78B52B; text-decoration: none; }
-				a:hover {color: #CBFF4B; text-decoration: none; }
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js">
-		</script>
-
-		<script type="text/javascript">
-		$(function() 
-		{
-		$('.toggle_box').click(function()
-		{
-		key = this.id;
-		key = key.slice(1)
-		$('#'+key).slideToggle("slow");
-		return false;
-		});
-		});
-		</script>
-	%body{:style => "color: #417D6F; margin-left: 75px; margin-right: 75px; font: 18px/20px helvetica; text-align: center; background-color: #FFFFFF;"}
-		%h1{:style => "color: #417D6F;margin-bottom: -25px;"}
-			%a{:href => "/"}
-				The Movie Database
-		%h4{:style => "color: #417D6F;text-align: center;"}
-			%a{:href => "/movies"} Movies
-			|
-			%a{:href => "/actors"} Actors
-			|
-			%a{:href => "/directors"} Directors
-			
-			%form{:method => "POST", :action => "/search", :style => "font:14px/16px helvetica;"}
-				Search
-				%input{:type => "text", :size => "20", :name => "searchTerm"}
-		.content
-			= yield
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="/default.css"/>
+<title>The Movie Database</title>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.0/jquery.min.js">
+</script>
+<script type="text/javascript">
+$(function()
+{
+$('.toggle_box').click(function()
+{
+key = this.id;
+key = key.slice(1)
+$('#'+key).slideToggle("slow");
+return false;
+});
+});
+</script>
+</head>
+<body>
+<div class="main">
+<div class="container">
+<div class="gfx"><a href="/"><span></span></a></div>
+<div class="menu">
+<a href="/movies/title"><span>Movies</span></a>
+<a href="/actors"><span>Actors</span></a>
+<a href="/directors"><span>Directors</span></a>		
+<a id="last"><span><form action='/search' method='POST' style='text-align: center; margin-top: -22px;'>
+Search
+<input name='searchTerm' size='8' type='text' />
+</form></span></a>
+</div>
+.content
+	=yield
+<div class="footer">&copy; 2009 <a href="http://blog.samwarmuth.com">SamWarmuth.com</a>. Design by <a href="http://arcsin.se">Arcsin</a></div>
+</div>	
+</div>
+</body>
+</html>

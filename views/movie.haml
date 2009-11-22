@@ -18,7 +18,7 @@
 	= movie.title
 	-if movie.mpaa_rating != ""
 		(#{movie.mpaa_rating})
-%h2	
+%h3
 	= movie.release_year
 	\-
 	-unless movie.director.nil?
@@ -27,7 +27,7 @@
 	minutes
 	-if trailer != ''
 		%a{:href => trailer,:style => "font: 14px/16px helvetica;", :class =>"toggle_box", :id => "c#{jQ_clean(movie.title)}trailer"} Trailer
-%div{:id => "#{jQ_clean(movie.title)}trailer", :style => "display: none; font: 14px/16px helvetica; width:500px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
+%div{:id => "#{jQ_clean(movie.title)}trailer", :style => "display: none; font: 14px/16px helvetica; width:490px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 	<object width="480" height="385"><param name="movie" value="http://www.youtube.com/v/#{trailer}&hl=en_US&fs=1&"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><embed src="http://www.youtube.com/v/#{trailer}&hl=en_US&fs=1&" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" width="480" height="385"></embed></object>
 %table{:style => "width: 30em; margin-left: auto; margin-right: auto; text-align: left;"}
 	%tr
@@ -35,7 +35,8 @@
 			-unless poster == ''
 				%img{:src => poster}
 		%td
-			= movie.plot
+			%h4
+				= movie.plot
 -actors = movie.actors
 -unless actors[0].nil?
 	%h2

@@ -6,6 +6,7 @@ require 'haml'
 require 'lib/authorization'
 require 'yaml'
 require 'open-uri'
+require 'sass'
 $API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
 $Poster_urls = {}
 class Actor
@@ -44,6 +45,10 @@ DataMapper.auto_upgrade!
 before do headers "Content-Type" => "text/html; charset=utf-8" end
 
 get '/' do haml :index end
+get '/default.css' do
+	    content_type 'text/css', :charset => 'utf-8'
+	    sass :stylesheet
+end	
 get '/favicon.ico' do redirect 'http://harpastum.googlepages.com/favicon.ico' end 
 post '/search' do haml :search end
 post '/autofill' do haml :autofill end
@@ -160,9 +165,12 @@ get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
 end
 
 get '/:page' do haml params[:page].to_sym end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
-get '/:type/:key' do haml params[:type].to_sym end	#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
+get '/:type/:key' do 
+	pass if params[:type] == "img"
+	haml params[:type].to_sym 
+end	#/movie/:title /editMovie/:title /actor/:name /editActor/:name /director/:name /editDirector/:name
 not_found do
-	Haml("You're looking for a page that doesn't exist. Sorry.")
+	"You're looking for a page that doesn't exist. Sorry."
 end
 helpers do
 	include Sinatra::Authorization

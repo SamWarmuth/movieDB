@@ -3,7 +3,7 @@
 
 %h1 
 	Actors
-%p
+%h4
 	= haml(:actorsAlph, :layout => false)
 %h2
 	= params[:key]
@@ -21,5 +21,5 @@
 		%br
 		%a{:href => "/actor/#{actor.name}"} Full Info
 		
-%p
+%h3
 	%a{:href => "/addActor"} Add Actor
