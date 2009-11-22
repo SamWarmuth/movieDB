@@ -1,14 +1,14 @@
 -movies = Movie.all(:title.like => "%#{params[:searchTerm]}%")
 -actors = Actor.all(:name.like => "%#{params[:searchTerm]}%")
 -directors = Director.all(:name.like => "%#{params[:searchTerm]}%")
-%h1 
-	Searching for '#{params[:searchTerm]}'
 %h2
+	Searching for '#{params[:searchTerm]}'
+%h4
 	-unless movies[0].nil?
 		%p Movies
 		-movies.each do |movie|
 			%a{:href => "/movie/#{movie.title}", :class =>"toggle_box", :id => "c#{jQ_clean(movie.title)}"} #{movie.title}
-			%br/
+			%br
 			%div{:id => "#{jQ_clean(movie.title)}", :style => "display: none; font: 14px/16px helvetica; width:400px; margin: auto;-moz-border-radius: 10px; -webkit-border-radius: 10px; background-color: #eee; padding: 5px;"}
 				= movie.plot[0..270] << "..."
 				-movie.actors.each do |actor|
@@ -16,8 +16,8 @@
 				%br/
 				%strong
 					%a{:href => "/movie/#{movie.title}"} Full Info
-			%br/
 	-unless actors[0].nil?	
+		%br
 		%p Actors
 		-actors.each do |actor|
 			%a{:href => "/actor/#{actor.name}", :class =>"toggle_box", :id => "c#{jQ_clean(actor.name)}"} #{actor.name}
@@ -28,9 +28,9 @@
 					%a{:href => "/movie/#{movie.title}"} #{movie.title},
 				%br
 				%a{:href => "/actor/#{actor.name}"} Full Info
-			%br/
 			
-	-unless directors[0].nil?	
+	-unless directors[0].nil?
+		%br	
 		%p Directors
 		-directors.each do |director|
 			%a{:href => "/director/#{director.name}", :class =>"toggle_box", :id => "c#{jQ_clean(director.name)}"} #{director.name}
@@ -41,4 +41,3 @@
 					%a{:href => "/movie/#{movie.title}"} #{movie.title},
 				%br
 				%a{:href => "/director/#{director.name}"} Full Info
-			%br/
