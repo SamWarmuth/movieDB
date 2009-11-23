@@ -49,7 +49,6 @@ get '/default.css' do
 	    content_type 'text/css', :charset => 'utf-8'
 	    sass :stylesheet
 end	
-get '/favicon.ico' do redirect 'http://harpastum.googlepages.com/favicon.ico' end 
 post '/search' do haml :search end
 post '/autofill' do haml :autofill end
 	
@@ -164,7 +163,10 @@ get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
 	redirect "/#{params[:type].downcase}s"
 end
 
-get '/:page' do haml params[:page].to_sym end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
+get '/:page' do 
+	pass if params[:page] == "favicon.ico"
+	haml params[:page].to_sym 
+end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
 get '/:type/:key' do 
 	pass if params[:type] == "img"
 	haml params[:type].to_sym 
