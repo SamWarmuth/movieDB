@@ -8,7 +8,7 @@ require 'yaml'
 require 'open-uri'
 require 'sass'
 $API_KEY = "3cbb4446ab38deb3541b672b248efbf0"
-$Poster_urls = {}
+$poster_urls = {}
 class Actor
 	include DataMapper::Resource
 	property :name,	String, :key => true

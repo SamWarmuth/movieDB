@@ -3,13 +3,13 @@
 - poster = ''
 - m = YAML.load(open(URI.escape("http://api.themoviedb.org/2.1/Movie.search/en/yaml/"+$API_KEY+'/'+movie.title)).read)[0]
 - result = YAML.load(open("http://api.themoviedb.org/2.1/Movie.getInfo/en/yaml/"+$API_KEY + '/' + m["id"].to_s).read)[0]
--if $Poster_urls[movie.title].nil?
+-if $poster_urls[movie.title].nil?
 	-if result.is_a? Hash
 		-result['posters'].each do |image|
 			-poster = image['image']['url'] if image['image']['size'] == "cover"
-	-$Poster_urls[movie.title]=poster unless poster == ''
+	-$poster_urls[movie.title]=poster unless poster == ''
 -else
-	- poster = $Poster_urls[movie.title]
+	- poster = $poster_urls[movie.title]
 -unless result.nil?
 	-trailer = (result['trailer'].nil? ? "" : result['trailer'])
 - trailer.gsub!('http://www.youtube.com/watch?v=',"")
