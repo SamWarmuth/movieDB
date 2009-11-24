@@ -164,7 +164,7 @@ get '/delete:type/:value' do #deleteMovie, deleteActor, deleteDirector
 end
 
 get '/:page' do 
-	pass if params[:page] == "favicon.ico"
+	pass if params[:page] == "favicon.ico" || params[:page]=="robots.txt"
 	haml params[:page].to_sym 
 end #/movies /addMovie/ /actors/ /addActor/ /director/ /addDirector/
 get '/:type/:key' do 
