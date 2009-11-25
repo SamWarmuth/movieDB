@@ -1,6 +1,9 @@
 - params[:key]="title" if params[:key].nil?
 - movies = Movie.all(:order =>[params[:key].to_sym.asc])
 -load_limit = 1
+-if $poster_urls.length < 100
+	-File.open("poster_urls.txt", "r") {|file| eval (file.read)}
+
 %h1
 	Movies
 	(#{movies.count})
